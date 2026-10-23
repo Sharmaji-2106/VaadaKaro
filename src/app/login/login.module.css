@@ -1,0 +1,278 @@
+.authWrapper {
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brand-gray-bg);
+  padding: 2rem;
+}
+
+.authContainer {
+  display: flex;
+  background: white;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 600px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: none;
+  border: 1px solid var(--brand-navy);
+}
+
+/* Left Side: Professional Guidance */
+.guidanceSide {
+  flex: 1;
+  background-color: var(--brand-navy);
+  color: white;
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guidanceIcon {
+  color: var(--brand-saffron);
+  margin-bottom: 2rem;
+}
+
+.guidanceTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.guidanceText {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 3rem;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.benefitsList li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.benefitIcon {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-saffron);
+}
+
+.benefitsList span {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.trustShield {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--brand-saffron);
+  letter-spacing: 0.05em;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 2rem;
+}
+
+/* Right Side: Form */
+.formSide {
+  flex: 1.2;
+  padding: 5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+}
+
+.formHeader {
+  margin-bottom: 3rem;
+}
+
+.formTitle {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--brand-navy);
+  margin-bottom: 0.75rem;
+}
+
+.formSubtitle {
+  color: var(--brand-text-light);
+  font-size: 1.1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.errorMessage {
+  background: #fef2f2;
+  border: 1px solid #fca5a1;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.successMessage {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+  padding: 1rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.field label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--brand-navy);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--brand-text-light);
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"] {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 3rem;
+  border: 1px solid var(--brand-gray-border);
+  border-radius: 4px;
+  font-size: 1rem;
+  color: var(--brand-text);
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--brand-navy);
+  box-shadow: 0 0 0 4px rgba(18, 59, 105, 0.05);
+}
+
+.forgotLink {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brand-navy);
+  text-decoration: underline;
+}
+
+.submitBtn {
+  margin-top: 1rem;
+  background: var(--brand-navy);
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: none;
+}
+
+.submitBtn:hover {
+  background: var(--brand-navy-light);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.formFooter {
+  margin-top: 2.5rem;
+  font-size: 1rem;
+  color: var(--brand-text-light);
+  font-weight: 500;
+  text-align: center;
+}
+
+.formFooter a {
+  color: var(--brand-navy);
+  font-weight: 800;
+  text-decoration: underline;
+  margin-left: 4px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--brand-text-light);
+  cursor: pointer;
+  text-transform: none !important;
+}
+
+.checkboxLabel input {
+  margin-top: 0.2rem;
+  width: 16px;
+  height: 16px;
+}
+
+.checkboxLabel span {
+  font-weight: 500;
+}
+
+@media (max-width: 992px) {
+  .authContainer {
+    flex-direction: column;
+    max-width: 500px;
+  }
+  .guidanceSide {
+    padding: 3rem 2rem;
+  }
+  .formSide {
+    padding: 3rem 2rem;
+  }
+}
+

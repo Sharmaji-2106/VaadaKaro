@@ -1,0 +1,229 @@
+.timelineContainer {
+  background: white;
+  border-radius: 4px;
+  padding: 2.5rem;
+  border: 1px solid var(--brand-gray-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--brand-saffron);
+}
+
+.iconBox {
+  width: 40px;
+  height: 40px;
+  background: var(--brand-navy);
+  color: white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--brand-navy);
+  margin-bottom: 0.25rem;
+}
+
+.cardHeader p {
+  font-size: 0.85rem;
+  color: var(--brand-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timelineWrapper {
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.stageItem {
+  display: flex;
+  gap: 1.5rem;
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.stageItem:last-child {
+  padding-bottom: 0;
+}
+
+.stageVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 32px;
+}
+
+.stageIcon {
+  width: 28px;
+  height: 28px;
+  background: #F1F5F9;
+  border: 2px solid #E2E8F0;
+  color: #94A3B8;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-weight: 800;
+}
+
+.connector {
+  width: 2px;
+  flex: 1;
+  background: #E2E8F0;
+  margin: 4px 0;
+}
+
+.stageContent {
+  flex: 1;
+}
+
+.stageContent h3 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #64748B;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.stageContent p {
+  font-size: 0.85rem;
+  color: #94A3B8;
+  line-height: 1.4;
+}
+
+/* Completed State - Official Blue */
+.completed .stageIcon {
+  background: var(--brand-navy);
+  border-color: var(--brand-navy);
+  color: white;
+}
+
+.completed .connector {
+  background: var(--brand-navy);
+}
+
+.completed .stageContent h3 {
+  color: var(--brand-navy);
+}
+
+/* Active State - Saffron Accent */
+.active .stageIcon {
+  background: var(--brand-saffron);
+  border-color: var(--brand-saffron);
+  color: var(--brand-navy);
+}
+
+.active .stageContent h3 {
+  color: var(--brand-navy);
+}
+
+.active .stageContent p {
+  color: var(--brand-text);
+  font-weight: 500;
+}
+
+/* Remarks / Feed */
+.updateFeed {
+  background: #F8FAFC;
+  border-radius: 4px;
+  padding: 1.5rem;
+  border: 1px solid var(--brand-gray-border);
+}
+
+.feedHeader {
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brand-navy);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--brand-gray-border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--brand-gray-border);
+}
+
+.trackingTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.trackingTable th {
+  background: #F1F5F9;
+  color: var(--brand-navy);
+  font-weight: 800;
+  padding: 0.75rem 1rem;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--brand-gray-border);
+}
+
+.trackingTable td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--brand-gray-border);
+  vertical-align: top;
+  color: var(--brand-text);
+}
+
+.trackingTable tr:last-child td {
+  border-bottom: none;
+}
+
+.trackingTable tr:nth-child(even) {
+  background: #F8FAFC;
+}
+
+.eventStatus {
+  font-weight: 800;
+  color: var(--brand-navy);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.eventRemarks {
+  font-size: 0.85rem;
+  color: var(--brand-text-muted);
+  line-height: 1.4;
+}
+
+.emptyTable {
+  text-align: center;
+  padding: 2rem !important;
+  color: var(--brand-text-light);
+  font-style: italic;
+}
+
+.rejected .stageIcon {
+  background: #991B1B;
+  border-color: #991B1B;
+  color: white;
+}
+
+.rejected .stageContent h3 {
+  color: #991B1B;
+}
+

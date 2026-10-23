@@ -1,0 +1,121 @@
+.pageWrapper {
+  min-height: calc(100vh - var(--header-height));
+  background-color: var(--brand-gray-bg);
+  padding: 3rem 1rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--brand-navy);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.header p {
+  font-size: 1rem;
+  color: var(--brand-text-light);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  color: var(--brand-navy);
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.emptyState, .errorState {
+  background: white;
+  padding: 4rem 2rem;
+  border-radius: 4px;
+  text-align: center;
+  border: 1px solid var(--brand-gray-border);
+  max-width: 650px;
+  margin: 3rem auto;
+}
+
+.emptyIcon, .errorIcon {
+  color: var(--brand-navy);
+  margin-bottom: 1.5rem;
+  opacity: 0.15;
+}
+
+.errorIcon {
+  width: 56px;
+  height: 56px;
+  background: #FEF2F2;
+  color: #DC2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem auto;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.retryBtn {
+  margin-top: 1.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--brand-navy);
+  color: white;
+  border-radius: 4px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.resultsArea {
+  margin-top: 3rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .mainGrid { grid-template-columns: 1fr; }
+  .header h1 { font-size: 1.75rem; }
+  .pageWrapper { padding: 2rem 1rem; }
+}
+

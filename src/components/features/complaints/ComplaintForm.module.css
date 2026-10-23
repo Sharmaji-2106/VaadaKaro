@@ -1,0 +1,330 @@
+.formContainer {
+  max-width: 1000px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.stepper {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background: var(--brand-navy);
+  color: white;
+  gap: 1rem;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  position: relative;
+}
+
+.stepCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: white;
+}
+
+.active .stepCircle {
+  background: var(--brand-saffron);
+  border-color: var(--brand-saffron);
+  color: var(--brand-navy);
+}
+
+.stepLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.active .stepLabel {
+  color: white;
+}
+
+.formBody {
+  padding: 3rem 4rem;
+}
+
+.stepContent h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--brand-navy);
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--brand-saffron);
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.stepContent p.stepDesc {
+  color: var(--brand-text-light);
+  margin-bottom: 2.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+  display: block;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--brand-navy);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inputGroup input,
+.inputGroup select,
+.inputGroup textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--brand-gray-border);
+  background: #FFFFFF;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--brand-text);
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus,
+.inputGroup textarea:focus {
+  outline: none;
+  border-color: var(--brand-navy);
+  box-shadow: 0 0 0 3px rgba(18, 59, 105, 0.05);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* AI Verification Styles - Official Report Look */
+.aiAnalyzeBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--brand-navy);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+.aiFeedback {
+  margin-top: 2rem;
+  background: #F8FAFC;
+  border: 1px solid var(--brand-gray-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.aiFeedbackHeader {
+  background: var(--brand-navy);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.scoreBadge {
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.scoreHigh {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+.scoreMedium {
+  background: #FEF9C3;
+  color: #854D0E;
+  border: 1px solid #FEF08A;
+}
+
+.scoreLow {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.aiFeedbackBody {
+  padding: 1.5rem;
+}
+
+.feedbackText {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--brand-text);
+  margin-bottom: 1.5rem;
+}
+
+.missingDetails {
+  background: white;
+  border: 1px solid #E2E8F0;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.missingDetails strong {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #c2410c;
+  margin-bottom: 0.75rem;
+}
+
+.missingDetails ul {
+  padding-left: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--brand-text-muted);
+}
+
+/* Location and Evidence */
+.uploadArea {
+  border: 2px dashed var(--brand-gray-border);
+  padding: 3rem;
+  border-radius: 4px;
+  text-align: center;
+  background: #F8FAFC;
+  position: relative;
+}
+
+.uploadIcon {
+  color: var(--brand-navy);
+  opacity: 0.4;
+  margin-bottom: 1rem;
+}
+
+/* Review Section */
+.reviewGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  background: #F8FAFC;
+  padding: 2rem;
+  border: 1px solid var(--brand-gray-border);
+  border-radius: 4px;
+  margin-bottom: 2rem;
+}
+
+.reviewItem label {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--brand-text-light);
+  margin-bottom: 4px;
+}
+
+.reviewItem p {
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.declaration {
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+.formFooter {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem 4rem 3rem 4rem;
+  background: white;
+}
+
+.backBtn {
+  font-weight: 800;
+  color: var(--brand-text-light);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
+}
+
+.nextBtn, .submitBtn {
+  background: var(--brand-navy);
+  color: white;
+  padding: 0.75rem 2.5rem;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.submitBtn {
+  background: var(--brand-saffron);
+  color: var(--brand-navy);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.warningMessage {
+  background: #FFF7ED;
+  color: #C2410C;
+  padding: 1rem;
+  border: 1px solid #FED7AA;
+  margin: 0 4rem 2rem 4rem;
+  border-radius: 4px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.errorMessage {
+  background: #FEF2F2;
+  color: #991B1B;
+  padding: 1rem;
+  border: 1px solid #FCA5A1;
+  margin: 0 4rem 2rem 4rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+  .stepper { display: none; }
+  .formBody { padding: 2rem; }
+  .formFooter { padding: 2rem; }
+}
+

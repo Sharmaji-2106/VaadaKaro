@@ -1,0 +1,130 @@
+:root {
+  /* Official Civic Palette - Trust & Authority (Inspired by CPGRAMS & DigiLocker) */
+  --brand-navy: #123B69;       /* Deep Navy - Stability & Authority */
+  --brand-navy-light: #1D4E89;
+  --brand-saffron: #F4A261;     /* Professional Saffron - Subtle Accent (Not neon) */
+  --brand-saffron-dark: #E76F51;
+  --brand-gold: #D4AF37;       /* Official Emblems Gold */
+  
+  --brand-white: #FFFFFF;
+  --brand-gray-bg: #F8FAFC;    /* Very light gray for structure */
+  --brand-gray-border: #CBD5E1; 
+  
+  --brand-text: #1E293B;       /* High contrast text */
+  --brand-text-muted: #475569;
+  --brand-text-light: #64748B;
+
+  /* Semantic Colors */
+  --primary: var(--brand-navy);
+  --secondary: var(--brand-saffron);
+  --accent: var(--brand-gold);
+  
+  --background: var(--brand-gray-bg);
+  --foreground: var(--brand-text);
+  
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  
+  --border: var(--brand-gray-border);
+  --input: #FFFFFF;
+  --ring: var(--brand-navy);
+  
+  /* Traditional Box Shadows - Subtle and Professional, No Glowing effects */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+  /* Typography - Professional, Accessible & Highly Readable */
+  --font-inter: 'Inter', -apple-system, system-ui, sans-serif;
+  
+  /* Radii - Disciplined and clean */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Spacing */
+  --container-width: 1200px;
+  --header-height: 100px;
+}
+
+/* Force light mode style as per civic-tech requirements for visibility/accessibility */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #F8FAFC; 
+    --foreground: #1E293B;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-inter);
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  line-height: 1.5; /* Slightly tighter for information density */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* Utility Classes for Official Look */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.official-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: none; /* Removed shadow for administrative look */
+}
+
+.section-padding {
+  padding: 3rem 0; /* Reduced from 4rem for higher density */
+}
+
+.gov-indicator {
+  background: #E2E8F0;
+  padding: 4px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 100px;
+  color: var(--brand-navy);
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 2.5rem 0;
+  }
+}
+
