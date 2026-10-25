@@ -1,0 +1,251 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String           @id @default(cuid())
+  name               String?
+  email              String           @unique
+  emailVerified      DateTime?
+  phone              String?
+  image              String?
+  password           String?
+  role               UserRole         @default(CITIZEN)
+  location           String?
+  department         String?
+  isVerified         Boolean          @default(false)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  aiSessions         AILegalHistory[]
+  accounts           Account[]
+  auditLogs          AuditLog[]
+  Authenticator      Authenticator[]
+  assignedComplaints Complaint[]      @relation("AssignedComplaints")
+  complaints         Complaint[]
+  legalDocs          LegalDocument[]
+  notifications      Notification[]
+  sessions           Session[]
+  settings           UserSettings?
+  lawyerProfile      LawyerProfile?
+  citizenBookings    Booking[]        @relation("CitizenBookings")
+  lawyerBookings     Booking[]        @relation("LawyerBookings")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Complaint {
+  id                String            @id @default(cuid())
+  trackingId        String            @unique @default(uuid())
+  title             String
+  description       String
+  status            ComplaintStatus   @default(SUBMITTED)
+  priority          PriorityLevel     @default(MEDIUM)
+  category          String
+  department        String
+  location          String?
+  pincode           String?
+  citizenId         String
+  assignedOfficerId String?
+  assignedAuthority String?
+  internalNotes     String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  attachments       Attachment[]
+  assignedOfficer   User?             @relation("AssignedComplaints", fields: [assignedOfficerId], references: [id])
+  citizen           User              @relation(fields: [citizenId], references: [id])
+  updates           ComplaintUpdate[]
+}
+
+model ComplaintUpdate {
+  id          String          @id @default(cuid())
+  complaintId String
+  status      ComplaintStatus
+  remarks     String
+  updatedBy   String
+  createdAt   DateTime        @default(now())
+  complaint   Complaint       @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+}
+
+model Attachment {
+  id          String    @id @default(cuid())
+  url         String
+  filename    String
+  mimeType    String?
+  fileSize    Int?
+  complaintId String
+  createdAt   DateTime  @default(now())
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  metadata  String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+model AILegalHistory {
+  id            String   @id @default(cuid())
+  userId        String
+  query         String
+  response      String
+  legalCategory String?
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String
+  title       String
+  message     String
+  isRead      Boolean  @default(false)
+  complaintId String?
+  actionUrl   String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSettings {
+  id                  String  @id @default(cuid())
+  userId              String  @unique
+  emailEnabled        Boolean @default(true)
+  pushEnabled         Boolean @default(true)
+  legalUpdatesEnabled Boolean @default(true)
+  user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LegalDocument {
+  id          String   @id @default(cuid())
+  userId      String
+  complaintId String?
+  title       String
+  content     String
+  type        String
+  category    String?
+  riskLevel   String?
+  analysis    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum UserRole {
+  CITIZEN
+  OFFICER
+  LAWYER
+  ADMIN
+}
+
+enum ComplaintStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  IN_PROGRESS
+  INFO_REQUESTED
+  RESOLVED
+  REJECTED
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model LawyerProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id])
+  barNumber    String
+  specialization String[]
+  location     String
+  pincode      String
+  fees         Int      // per consultation in INR
+  experience   Int      // years
+  isAvailable  Boolean  @default(true)
+  isVerified   Boolean  @default(false)
+  languages    String[]
+  bio          String?
+  rating       Float    @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model Booking {
+  id          String   @id @default(cuid())
+  citizenId   String
+  lawyerId    String
+  date        DateTime
+  timeSlot    String
+  description String
+  status      BookingStatus @default(PENDING)
+  isOffline   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  citizen     User     @relation("CitizenBookings", fields: [citizenId], references: [id])
+  lawyer      User     @relation("LawyerBookings", fields: [lawyerId], references: [id])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
