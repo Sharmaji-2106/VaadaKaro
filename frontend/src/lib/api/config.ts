@@ -1,5 +1,8 @@
 /** Where the FastAPI backend lives. Only read on the server (route handlers, server components, actions). */
-export const API_URL = (process.env.API_URL || 'http://localhost:8000').replace(/\/$/, '');
+export const API_URL = (
+  process.env.API_URL ||
+  (process.env.NODE_ENV === 'production' ? 'https://vaadakaro.onrender.com' : 'http://localhost:8000')
+).replace(/\/$/, '');
 
 /** httpOnly cookie that holds the backend's JWT access token. */
 export const TOKEN_COOKIE = 'vk_token';
