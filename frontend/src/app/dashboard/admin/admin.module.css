@@ -1,0 +1,33 @@
+.errorBanner {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  background: var(--red-soft);
+  color: var(--red);
+  font-size: 0.9375rem;
+}
+
+.roleForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.saveBtn {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.saveBtn:hover {
+  background: var(--accent-hover);
+}
+
+.saved {
+  font-size: 0.8125rem;
+  color: var(--green);
+}

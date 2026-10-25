@@ -1,0 +1,40 @@
+# dependencies
+node_modules
+
+# next.js
+.next/
+out/
+
+# production
+build/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# env files
+.env
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# prisma generated
+/src/generated/prisma
+
+# test files
+test-output.txt
+test-output-detailed.txt
+test-signup-verification.ts
+typescript_errors.txt
+prisma_gen_error.txt
+prisma-v.txt

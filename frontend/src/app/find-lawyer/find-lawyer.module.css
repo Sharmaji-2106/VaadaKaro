@@ -1,0 +1,273 @@
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  min-height: 50vh;
+}
+
+.pageHeader {
+  margin-bottom: 1.75rem;
+}
+
+.pageHeader h1 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.pageHeader p {
+  color: var(--label-secondary);
+  font-size: 1.0625rem;
+  margin-top: 0.2rem;
+}
+
+.inlineLink {
+  color: var(--link);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.inlineLink:hover {
+  text-decoration: underline;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--fill-strong);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  color: var(--label-tertiary);
+  margin-bottom: 1rem;
+  transition: background var(--transition-base), box-shadow var(--transition-base);
+}
+
+.searchBar:focus-within {
+  background: var(--surface);
+  box-shadow: 0 0 0 4px rgba(242, 140, 40, 0.4);
+}
+
+.searchBar input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1rem;
+}
+
+.searchBar input:focus-visible {
+  box-shadow: none;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.chip {
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: 0.875rem;
+  color: var(--label);
+  box-shadow: inset 0 0 0 1px var(--separator-strong);
+  transition: background var(--transition-base), color var(--transition-base);
+}
+
+.chip:hover {
+  background: var(--fill-strong);
+}
+
+.chipActive,
+.chipActive:hover {
+  background: var(--label);
+  color: white;
+  box-shadow: none;
+}
+
+/* Secondary filters row */
+.sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--separator);
+}
+
+.input,
+.select {
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  border: none;
+  background: var(--fill-strong);
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.input {
+  width: 150px;
+}
+
+.input:focus,
+.select:focus {
+  box-shadow: 0 0 0 4px rgba(242, 140, 40, 0.4);
+}
+
+.rangeGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: var(--label-secondary);
+}
+
+.rangeGroup input {
+  accent-color: var(--accent);
+  width: 130px;
+}
+
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.toggleWrapper input {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+
+.status {
+  padding: 4rem 0;
+  text-align: center;
+  color: var(--label-tertiary);
+}
+
+/* Cards */
+.lawyerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.lawyerCard {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lawyerCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cardHeader {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #a1a1a6, #7c7c80);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.lawyerInfo h4 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+  color: #ff9500;
+}
+
+.dotSep,
+.muted {
+  color: var(--label-secondary);
+}
+
+.specialization {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tag {
+  background: var(--fill);
+  color: var(--label-secondary);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+}
+
+.cardDetails {
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+}
+
+.cardFooter {
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--separator);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fees {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.fees span {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--label-secondary);
+}
+
+.bookBtn {
+  background: var(--accent);
+  color: white;
+  padding: 0.4rem 1.1rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background var(--transition-base);
+}
+
+.bookBtn:hover {
+  background: var(--accent-hover);
+}
+
+@media (max-width: 640px) {
+  .pageHeader h1 { font-size: 2.125rem; }
+}

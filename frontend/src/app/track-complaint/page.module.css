@@ -1,0 +1,135 @@
+.pageWrapper {
+  min-height: calc(100vh - var(--header-height));
+  background-color: var(--fill);
+}
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 0;
+  color: var(--label-secondary);
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  color: var(--accent);
+  animation: spin 1s linear infinite;
+  margin-bottom: 0.75rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.errorState {
+  background: var(--surface);
+  border: 1px solid var(--separator);
+  border-left: 5px solid var(--red);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1.75rem;
+  max-width: 720px;
+}
+
+.errorState h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.errorState p {
+  color: var(--label-secondary);
+}
+
+.errorIcon {
+  display: none;
+}
+
+.retryBtn {
+  margin-top: 0.85rem;
+  color: var(--link);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.helpGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.helpCard {
+  background: var(--surface);
+  border: 1px solid var(--separator);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.5rem;
+}
+
+.helpCard svg {
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.helpCard h2 {
+  font-size: 1.0625rem;
+  margin-bottom: 0.35rem;
+}
+
+.helpCard p {
+  color: var(--label-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.helpCard code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  background: var(--fill);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  color: var(--label);
+  white-space: nowrap;
+}
+
+.helpCard a {
+  color: var(--link);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.resultsArea {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.replyBlock {
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .mainGrid,
+  .helpGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .container { padding: 1.5rem 1rem 3.5rem; }
+}

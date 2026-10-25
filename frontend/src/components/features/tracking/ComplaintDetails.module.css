@@ -1,0 +1,142 @@
+.detailsCard {
+  background: var(--surface);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  position: sticky;
+  top: calc(var(--header-height) + 1.5rem);
+}
+
+.trackingHeader {
+  margin-bottom: 1.25rem;
+}
+
+.idLabel {
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+  display: block;
+}
+
+.trackingId {
+  font-size: 1.3125rem;
+  font-weight: 600;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: 0;
+}
+
+.mainInfo {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  padding: 3px 12px;
+  background: var(--fill);
+  color: var(--label-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+  text-transform: capitalize;
+}
+
+.statusBadge[data-status="UNDER_REVIEW"],
+.statusBadge[data-status="ASSIGNED"],
+.statusBadge[data-status="SUBMITTED"] {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+.statusBadge[data-status="IN_PROGRESS"],
+.statusBadge[data-status="INFO_REQUESTED"] {
+  background: var(--orange-soft);
+  color: var(--orange);
+}
+
+.statusBadge[data-status="RESOLVED"] {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.statusBadge[data-status="REJECTED"] {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 1rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--separator);
+  border-bottom: 1px solid var(--separator);
+  margin-bottom: 1.25rem;
+}
+
+.metaItem label {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+  margin-bottom: 1px;
+}
+
+.metaItem p {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.resolutionBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.resolutionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--label-secondary);
+  font-size: 0.8125rem;
+}
+
+.resolutionText {
+  font-size: 0.9375rem;
+}
+
+.resolutionText strong {
+  font-weight: 500;
+}
+
+.downloadLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  padding: 0.6rem;
+  border-radius: 10px;
+  background: var(--fill-strong);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.downloadLink:hover {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+@media (max-width: 900px) {
+  .detailsCard { position: static; }
+}
+
+@media (max-width: 640px) {
+  .detailsCard { padding: 1.5rem; }
+}

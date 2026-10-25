@@ -1,0 +1,156 @@
+.container {
+  padding-bottom: 2rem;
+}
+
+.subtitle {
+  color: var(--label-secondary);
+  font-size: 1.0625rem;
+}
+
+.notice {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.totals {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--label-secondary);
+}
+
+.totals span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--label);
+  margin-right: 0.25rem;
+}
+
+.empty {
+  text-align: center;
+  color: var(--label-tertiary);
+  padding: 3rem 1rem !important;
+}
+
+.warn {
+  color: var(--orange);
+  font-size: 0.875rem;
+}
+
+.progressDot { background: var(--blue); }
+.rejectedDot { background: var(--red); }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pickers {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.select {
+  padding: 0.5rem 0.85rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--fill-strong);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.generateBtn {
+  background: var(--accent);
+  color: white;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background var(--transition-base), opacity var(--transition-base);
+}
+
+.generateBtn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.generateBtn:disabled {
+  opacity: 0.5;
+}
+
+.tableWrapper {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+
+.table th {
+  color: var(--label-secondary);
+  padding: 0.85rem 1.25rem 0.6rem;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  border-bottom: 1px solid var(--separator);
+}
+
+.table td {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--separator);
+  font-size: 0.9375rem;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.strong {
+  font-weight: 500;
+}
+
+.statusInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--label-secondary);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.resolvedDot { background: var(--accent); }
+.pendingDot { background: var(--saffron); }

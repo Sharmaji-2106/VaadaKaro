@@ -1,0 +1,158 @@
+.container {
+  padding: 3.5rem 1.5rem 5rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 5rem 0;
+  color: var(--label-tertiary);
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.settingsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Grouped list */
+.cardHeader {
+  padding: 0 0 0.6rem;
+}
+
+.cardHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--label);
+}
+
+.cardContent {
+  background: var(--surface);
+  border: 1px solid var(--separator);
+  border-radius: var(--radius-lg);
+  padding: 0 1.25rem;
+}
+
+.settingItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--separator);
+}
+
+.settingItem:last-child {
+  border-bottom: none;
+}
+
+.settingInfo h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.settingInfo p {
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+  line-height: 1.35;
+}
+
+.valueText {
+  color: var(--label-secondary);
+  font-size: 1rem;
+}
+
+/* iOS switch */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 51px;
+  height: 31px;
+  flex-shrink: 0;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--fill-strong);
+  transition: background-color 0.25s ease;
+  border-radius: 31px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 27px;
+  width: 27px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  transition: transform 0.25s ease;
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.16);
+}
+
+input:checked + .slider {
+  background-color: var(--accent);
+}
+
+input:focus-visible + .slider {
+  box-shadow: 0 0 0 4px rgba(242, 140, 40, 0.4);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.saveSection {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+
+.saveBtn {
+  padding: 0.6rem 1.75rem;
+  background: var(--accent);
+  color: white;
+  border-radius: var(--radius-pill);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: background var(--transition-base), opacity var(--transition-base);
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.saveBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.successMsg {
+  color: var(--green);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}

@@ -1,0 +1,348 @@
+/* Shared styles for /terms, /privacy, /disclaimer */
+
+.legalPage {
+  min-height: 100vh;
+  background: var(--fill);
+}
+
+/* Hero (matches the shared page band) */
+.hero {
+  background: var(--surface);
+  border-bottom: 1px solid var(--separator);
+  padding: 2.75rem max(1.5rem, calc((100% - var(--container-width)) / 2 + 1.5rem)) 2.25rem;
+}
+
+.heroEyebrow {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--saffron-text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.heroEyebrow svg {
+  display: none;
+}
+
+.heroTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+.heroSubtitle {
+  color: var(--label-secondary);
+  font-size: 1.1875rem;
+  max-width: 680px;
+  line-height: 1.5;
+}
+
+.heroMeta {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.25rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.heroMetaItem {
+  color: var(--label-tertiary);
+  font-size: 0.875rem;
+}
+
+.heroMetaItem strong {
+  font-weight: 600;
+  color: var(--label-secondary);
+}
+
+/* Layout */
+.contentWrapper {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+
+.contentWrapper > * {
+  max-width: 800px;
+}
+/* Table of contents */
+.toc {
+  margin-bottom: 2rem;
+  padding: 0 0.25rem;
+}
+
+.tocTitle {
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.tocList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+}
+
+.tocList a {
+  display: inline-block;
+  color: var(--accent-text);
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--surface);
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1px var(--separator);
+}
+
+.tocList a:hover {
+  background: var(--accent-soft);
+}
+
+/* Accordion sections */
+.sectionCard {
+  background: var(--surface);
+  border: 1px solid var(--separator);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.5rem;
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sectionIcon,
+.sectionNum {
+  display: none;
+}
+
+.sectionTitleGroup {
+  flex: 1;
+}
+
+.sectionTitle {
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.chevron {
+  color: var(--label-tertiary);
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.sectionBody {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.sectionBody p {
+  color: var(--label-secondary);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin-bottom: 0.85rem;
+}
+
+.sectionBody p:last-child {
+  margin-bottom: 0;
+}
+
+.sectionBody ul,
+.sectionBody ol {
+  padding-left: 1.25rem;
+  color: var(--label-secondary);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin-bottom: 0.85rem;
+}
+
+.sectionBody li {
+  margin-bottom: 0.3rem;
+}
+
+.sectionBody strong {
+  color: var(--label);
+  font-weight: 600;
+}
+
+.sectionBody h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.4rem;
+}
+
+/* Callouts */
+.alertBox {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  margin: 1rem 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.alertBox p {
+  margin: 0 !important;
+  color: inherit !important;
+}
+
+.alertWarning { background: var(--orange-soft); color: var(--orange); }
+.alertDanger { background: var(--red-soft); color: var(--red); }
+.alertInfo { background: var(--accent-soft); color: var(--accent-text); }
+.alertSuccess { background: var(--green-soft); color: var(--green); }
+
+.highlightBox {
+  background: var(--fill);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  font-size: 0.9375rem;
+  color: var(--label);
+  line-height: 1.55;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.85rem 0;
+}
+
+.tag {
+  background: var(--fill);
+  color: var(--label-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+}
+
+.tagDanger {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+/* Disclaimer page list */
+.pointList {
+  background: var(--surface);
+  border: 1px solid var(--separator);
+  border-left: 4px solid var(--saffron);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.point {
+  padding: 1.25rem 1.5rem;
+}
+
+.point + .point {
+  border-top: 1px solid var(--separator);
+}
+
+.point h3 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.point p {
+  color: var(--label-secondary);
+  line-height: 1.6;
+}
+
+.emergencyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.emergencyItem {
+  background: var(--surface);
+  border: 1px solid var(--separator);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  text-align: center;
+}
+
+.emergencyItem strong {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.emergencyItem span {
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+}
+
+.subheading {
+  font-size: 1.3125rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+}
+
+/* Bottom CTA */
+.bottomCta {
+  margin-top: 3rem;
+  background: var(--accent-soft);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 2rem;
+}
+
+.bottomCta h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.4rem;
+}
+
+.bottomCta p {
+  color: var(--label-secondary);
+  font-size: 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--accent);
+  color: white;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  box-shadow: 0 3px 0 var(--accent-shadow);
+  font-size: 1rem;
+  transition: background var(--transition-base);
+}
+
+.ctaBtn svg {
+  display: none;
+}
+
+.ctaBtn:hover {
+  background: var(--accent-hover);
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 1.75rem 1rem 1.5rem; }
+  .heroTitle { font-size: 1.875rem; }
+  .contentWrapper { padding: 0.5rem 1rem 4rem; }
+  .sectionHeader { padding: 1rem 1.25rem; }
+  .sectionBody { padding: 0 1.25rem 1.25rem; }
+}

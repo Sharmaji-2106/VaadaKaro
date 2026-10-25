@@ -1,0 +1,65 @@
+.overview {
+  padding-bottom: 2rem;
+}
+
+.header {
+  margin-bottom: 1.75rem;
+}
+
+.header h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.header p {
+  color: var(--label-secondary);
+  font-size: 1.0625rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.statCard {
+  background: var(--surface);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: var(--label-secondary);
+}
+
+.statValue {
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-top: 0.2rem;
+}
+
+.recentSection {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+}
+
+.sectionTitle {
+  font-size: 1.3125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.emptyNote {
+  color: var(--label-tertiary);
+  font-size: 0.9375rem;
+  padding: 2.5rem 0;
+  text-align: center;
+}

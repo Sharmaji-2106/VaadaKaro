@@ -1,0 +1,234 @@
+.optional {
+  font-weight: 400;
+  color: var(--label-tertiary);
+}
+
+.voiceRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.voiceLang {
+  flex: 1;
+  min-width: 0;
+  padding: 0.45rem 0.7rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--fill-strong);
+  font-size: 0.875rem;
+}
+
+.voiceBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.voiceActive {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.warning {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--orange-soft);
+  color: var(--orange);
+  font-size: 0.9375rem;
+}
+
+.warning svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.summaryGrid,
+.listGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.listGrid {
+  margin-top: 1rem;
+}
+
+.tile {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.35rem;
+  box-shadow: var(--shadow-card);
+}
+
+.tileWide {
+  grid-column: 1 / -1;
+}
+
+.tileLabel {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.tileValue {
+  font-size: 1.0625rem;
+  font-weight: 500;
+}
+
+.tileText {
+  font-size: 0.9375rem;
+}
+
+.verify {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.8125rem;
+  color: var(--saffron-text);
+}
+
+.tile ul {
+  padding-left: 1.1rem;
+  font-size: 0.9375rem;
+}
+
+.letterCard {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.letterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.letterHeader h2 {
+  font-size: 1.3125rem;
+  font-weight: 600;
+}
+
+.aiBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--saffron-text);
+  background: var(--saffron-soft);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.bodyLabel {
+  margin-top: 1rem;
+}
+
+.letterBody {
+  width: 100%;
+  min-height: 360px;
+  padding: 1rem;
+  border: 1px solid var(--separator-strong);
+  border-radius: 12px;
+  font-family: "New York", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  resize: vertical;
+}
+
+.letterBody:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(242, 140, 40, 0.4);
+}
+
+.hint {
+  margin-top: 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+}
+
+.hint a,
+.nextStep a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.primaryBtn {
+  background: var(--accent);
+  color: white;
+}
+
+.primaryBtn:hover {
+  background: var(--accent-hover);
+}
+
+.primaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondaryBtn {
+  background: var(--fill-strong);
+}
+
+.errorText {
+  margin-top: 0.6rem;
+  color: var(--red);
+  font-size: 0.875rem;
+}
+
+.nextStep {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background: var(--navy-soft);
+  font-size: 0.9375rem;
+}
+
+.disclaimerText {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+}
+
+@media (max-width: 640px) {
+  .summaryGrid,
+  .listGrid {
+    grid-template-columns: 1fr;
+  }
+}

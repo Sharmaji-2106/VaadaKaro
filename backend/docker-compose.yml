@@ -1,0 +1,22 @@
+# Local development: MongoDB + Redis + the API. Indexes are created on API startup.
+services:
+  db:
+    image: mongo:8
+    ports: ["27017:27017"]
+    volumes: [mongodata:/data/db]
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      MONGODB_URL: mongodb://db:27017/vaadakaro
+      RATE_LIMIT_STORAGE_URI: redis://redis:6379
+    ports: ["8000:8000"]
+    depends_on: [db, redis]
+
+volumes:
+  mongodata:

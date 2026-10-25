@@ -1,0 +1,110 @@
+.wrapper {
+  position: relative;
+}
+
+/* Base look for use outside a form; inside .inputGroup the form's own input rules apply. */
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--separator-strong);
+  background: var(--surface);
+  font: inherit;
+  font-size: 1rem;
+  color: var(--label);
+}
+
+/* Two classes so these win over the form's ".inputGroup input" rule. */
+.wrapper .input {
+  padding-right: 2.5rem;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+.wrapper .input:focus {
+  cursor: text;
+}
+
+.wrapper .input:disabled {
+  background: var(--fill);
+  color: var(--label-tertiary);
+  border-color: var(--separator);
+  cursor: not-allowed;
+}
+
+.wrapper .input[aria-invalid="true"] {
+  border-color: var(--red);
+}
+
+.icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: var(--label-secondary);
+  pointer-events: none;
+}
+
+.wrapper .input:disabled + .icon {
+  color: var(--label-tertiary);
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.list {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 288px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  padding: 0.3rem 0;
+  list-style: none;
+  background: var(--surface);
+  border: 2px solid var(--navy);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 0.55rem 0.85rem;
+  font-size: 1rem;
+  color: var(--label);
+  cursor: pointer;
+}
+
+.option svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.active {
+  background: var(--accent-soft);
+}
+
+.selected {
+  font-weight: 700;
+}
+
+.status {
+  padding: 0.75rem 0.85rem;
+  color: var(--label-tertiary);
+  font-size: 0.9375rem;
+}

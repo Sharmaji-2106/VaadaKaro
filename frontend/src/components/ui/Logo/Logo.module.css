@@ -1,0 +1,28 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 1;
+}
+
+.mark {
+  flex-shrink: 0;
+  display: block;
+}
+
+.word {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.suffix {
+  color: var(--accent);
+}
+
+.sm .word { font-size: 1.1rem; }
+.md .word { font-size: 1.35rem; }
+.lg .word { font-size: 2rem; }
+
+.light .name { color: var(--navy); }
+.dark .name { color: #ffffff; }
+.dark .suffix { color: #5fd39a; }

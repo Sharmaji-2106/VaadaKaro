@@ -1,0 +1,131 @@
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  height: calc(100vh - var(--header-height));
+  position: sticky;
+  top: var(--header-height);
+  background: rgba(246, 246, 248, 0.8);
+  border-right: 1px solid var(--separator);
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  padding: 1.5rem 1.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--label-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.nav {
+  flex: 1;
+  padding: 0 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  color: var(--label);
+  font-size: 0.875rem;
+  transition: background var(--transition-base);
+}
+
+.navItem svg {
+  color: var(--accent);
+}
+
+.navItem:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.activeItem,
+.activeItem:hover {
+  background: var(--fill-strong);
+  font-weight: 500;
+}
+
+.footer {
+  padding: 0.75rem;
+  border-top: 1px solid var(--separator);
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.25rem;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #a1a1a6, #7c7c80);
+  color: white;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.userInfo h4 {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userInfo p {
+  font-size: 0.75rem;
+  color: var(--label-secondary);
+}
+
+.logoutBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--label-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoutBtn:hover {
+  background: var(--fill-strong);
+  color: var(--red);
+}
+
+@media (max-width: 860px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    border-right: none;
+    border-bottom: 1px solid var(--separator);
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+  .logo { display: none; }
+  .nav { flex-direction: row; padding: 0; }
+  .footer { border-top: none; padding: 0; }
+  .userInfo { display: none; }
+}

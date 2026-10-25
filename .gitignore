@@ -1,40 +1,30 @@
 # dependencies
-node_modules
+node_modules/
+
+# env files (each app has its own .env.example)
+.env
+.env*.local
 
 # next.js
-.next/
-out/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
+next-env.d.ts
 
-# production
-build/
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
 
 # misc
 .DS_Store
 *.pem
-
-# debug
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# env files
-.env
-.env*.local
-
-# vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Unused since the move to MongoDB (2026-10)
+prisma/
 
-# prisma generated
-/src/generated/prisma
-
-# test files
-test-output.txt
-test-output-detailed.txt
-test-signup-verification.ts
-typescript_errors.txt
-prisma_gen_error.txt
-prisma-v.txt
+# Claude Code local state
+.claude/

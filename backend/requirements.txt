@@ -1,0 +1,14 @@
+﻿fastapi>=0.115
+uvicorn>=0.32
+pydantic[email]>=2.9
+pydantic-settings>=2.6
+pyjwt>=2.10
+bcrypt>=4.2
+google-genai>=1.0
+fpdf2>=2.8.2
+uharfbuzz>=0.41
+boto3>=1.35
+slowapi>=0.1.9
+redis>=5.2
+beanie>=2.0
+pymongo>=4.13

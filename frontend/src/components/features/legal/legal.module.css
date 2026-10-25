@@ -1,0 +1,241 @@
+/* Analysis tiles */
+.analysisGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.tile {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.tileWide {
+  grid-column: 1 / -1;
+}
+
+.tileLabel {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.tileValue {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.tileValueLarge {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.pill {
+  padding: 0.3rem 0.8rem;
+  background: var(--fill);
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+}
+
+.muted {
+  color: var(--label-tertiary);
+  font-size: 0.9375rem;
+}
+
+/* Document card */
+.docCard {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.docHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 0;
+}
+
+.docType {
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+  text-transform: capitalize;
+}
+
+.docTitle {
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: 1px;
+}
+
+.docActions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--label-secondary);
+  transition: background var(--transition-base), color var(--transition-base);
+}
+
+.iconBtn:hover {
+  background: var(--fill);
+  color: var(--label);
+}
+
+.danger:hover {
+  color: var(--red);
+}
+
+.textBtn {
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  color: var(--accent-text);
+}
+
+.textBtn:hover {
+  background: var(--accent-soft);
+}
+
+.textBtnActive {
+  background: var(--accent-soft);
+}
+
+.primaryBtn {
+  padding: 0.45rem 1.2rem;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.5;
+}
+
+.docBody {
+  padding: 1rem 1.5rem 1.25rem;
+}
+
+.docContent {
+  font-family: "New York", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--label);
+  letter-spacing: 0;
+}
+
+.docEditor {
+  width: 100%;
+  min-height: 300px;
+  padding: 1rem;
+  background: var(--fill);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.docEditor:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.editorActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.docFooter {
+  padding: 0.7rem 1.5rem;
+  border-top: 1px solid var(--separator);
+  font-size: 0.75rem;
+  color: var(--label-tertiary);
+}
+
+/* Vault */
+.vault {
+  margin-top: 3rem;
+}
+
+.vaultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.vaultHeader h2 {
+  font-size: 1.3125rem;
+  font-weight: 600;
+}
+
+.vaultSearch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--fill-strong);
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  color: var(--label-tertiary);
+  width: 220px;
+}
+
+.vaultSearch input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 0.9375rem;
+}
+
+.vaultSearch input:focus-visible {
+  box-shadow: none;
+}
+
+.vaultStatus {
+  padding: 2.5rem 0;
+  text-align: center;
+  color: var(--label-tertiary);
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 640px) {
+  .analysisGrid { grid-template-columns: 1fr; }
+  .vaultSearch { width: 100%; }
+}

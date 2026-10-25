@@ -1,0 +1,182 @@
+.timelineContainer {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+}
+
+.cardHeader {
+  margin-bottom: 1.75rem;
+}
+
+.cardHeader h2 {
+  font-size: 1.3125rem;
+  font-weight: 600;
+}
+
+.cardHeader p {
+  font-size: 0.875rem;
+  color: var(--label-secondary);
+  margin-top: 2px;
+}
+
+.timelineWrapper {
+  margin-bottom: 2rem;
+}
+
+.stageItem {
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.stageItem:last-child {
+  padding-bottom: 0;
+}
+
+.stageVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.stageIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--fill);
+  color: var(--label-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.connector {
+  width: 2px;
+  flex: 1;
+  background: var(--fill-strong);
+  margin-top: 4px;
+  margin-bottom: -1.5rem;
+  border-radius: 1px;
+}
+
+.stageContent {
+  flex: 1;
+  padding-top: 1px;
+}
+
+.stageContent h3 {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--label-tertiary);
+}
+
+.stageContent p {
+  font-size: 0.8125rem;
+  color: var(--label-tertiary);
+}
+
+.completed .stageIcon {
+  background: var(--green);
+  color: white;
+}
+
+.completed .connector {
+  background: var(--green);
+}
+
+.completed .stageContent h3 {
+  color: var(--label);
+}
+
+.active .stageIcon {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 0 0 5px var(--accent-soft);
+}
+
+.active .stageContent h3 {
+  color: var(--label);
+  font-weight: 600;
+}
+
+.active .stageContent p {
+  color: var(--label-secondary);
+}
+
+.rejected .stageIcon {
+  background: var(--red);
+  color: white;
+}
+
+.rejected .stageContent h3 {
+  color: var(--red);
+}
+
+/* Activity */
+.updateFeed {
+  border-top: 1px solid var(--separator);
+  padding-top: 1.5rem;
+}
+
+.feedHeader {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.trackingTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.trackingTable th {
+  color: var(--label-secondary);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px solid var(--separator);
+}
+
+.trackingTable td {
+  padding: 0.85rem 0.75rem 0.85rem 0;
+  border-bottom: 1px solid var(--separator);
+  vertical-align: top;
+  color: var(--label-secondary);
+  white-space: nowrap;
+}
+
+.trackingTable td:last-child {
+  white-space: normal;
+}
+
+.trackingTable tr:last-child td {
+  border-bottom: none;
+}
+
+.eventStatus {
+  font-weight: 500;
+  color: var(--label);
+  text-transform: capitalize;
+}
+
+.eventRemarks {
+  color: var(--label-secondary);
+  margin-top: 2px;
+}
+
+.emptyTable {
+  text-align: center;
+  padding: 1.5rem 0 !important;
+  color: var(--label-tertiary) !important;
+}
