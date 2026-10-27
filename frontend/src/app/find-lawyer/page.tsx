@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import styles from "./find-lawyer.module.css";
-import { Search, Star, ChevronRight } from "lucide-react";
+import { Search, BadgeCheck, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { getLawyers } from "@/services/lawyers";
 
 const SPECIALIZATIONS = ["All", "Criminal", "Civil", "Consumer", "RTI", "Labour", "Family", "Property"];
 const LANGUAGES = ["Any", "Hindi", "Marathi", "English"];
+const BCI_ACCEPTED_KEY = "vk_bci_disclaimer";
 
 export default function FindLawyerPage() {
   const [lawyers, setLawyers] = useState<any[]>([]);
@@ -20,10 +21,28 @@ export default function FindLawyerPage() {
     search: ""
   });
   const [loading, setLoading] = useState(true);
+  // Bar Council of India Rules (Part VI, Ch. II, r.36): advocates may not solicit work, so visitors
+  // confirm they are looking on their own initiative before seeing any listing.
+  const [accepted, setAccepted] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetchLawyers();
-  }, [filters]);
+    let value = false;
+    try {
+      value = sessionStorage.getItem(BCI_ACCEPTED_KEY) === "1";
+    } catch {}
+    setAccepted(value);
+  }, []);
+
+  const accept = () => {
+    try {
+      sessionStorage.setItem(BCI_ACCEPTED_KEY, "1");
+    } catch {}
+    setAccepted(true);
+  };
+
+  useEffect(() => {
+    if (accepted) fetchLawyers();
+  }, [filters, accepted]);
 
   const fetchLawyers = async () => {
     setLoading(true);
@@ -50,13 +69,34 @@ export default function FindLawyerPage() {
         </nav>
         <h1>Find a lawyer</h1>
         <p className="lead">
-          Book a consultation with a verified advocate. Need a quick answer instead?{" "}
+          Advocates who have listed themselves on VaadaKaro, in a neutral order. Need a quick answer instead?{" "}
           <Link href="/ai-assistant" className={styles.inlineLink}>
             Ask the legal assistant <ChevronRight size={16} />
           </Link>
         </p>
       </div>
     </div>
+    {accepted === null ? null : !accepted ? (
+      <div className={styles.container}>
+        <section className={styles.disclaimer} aria-labelledby="bci-title">
+          <h2 id="bci-title">Before you continue</h2>
+          <p>
+            The Bar Council of India does not permit advocates to advertise or solicit work. By continuing, you
+            confirm that:
+          </p>
+          <ul>
+            <li>you are looking for information about advocates on your own initiative, and no one has solicited you;</li>
+            <li>the profiles are information the advocates gave about themselves (name, enrolment, areas of practice, languages and fees), not advertisements or recommendations;</li>
+            <li>VaadaKaro does not rank, rate or endorse any advocate, and is not a party to any engagement you make;</li>
+            <li>contacting an advocate through this page does not by itself create an advocate–client relationship.</li>
+          </ul>
+          <div className={styles.disclaimerActions}>
+            <button type="button" className={styles.bookBtn} onClick={accept}>I agree, show advocates</button>
+            <Link href="/ai-assistant" className={styles.inlineLink}>Ask the legal assistant instead</Link>
+          </div>
+        </section>
+      </div>
+    ) : (
     <div className={styles.container}>
 
       <div className={styles.searchBar}>
@@ -132,11 +172,22 @@ export default function FindLawyerPage() {
                 <div className={styles.lawyerInfo}>
                   <h4>{lawyer.user.name}</h4>
                   <div className={styles.rating}>
-                    <Star size={12} fill="currentColor" />
-                    <span>{lawyer.rating}</span>
+                    {lawyer.isVerified ? (
+                      <span className={styles.verified} title="Enrolment checked by VaadaKaro">
+                        <BadgeCheck size={13} /> Enrolment checked
+                      </span>
+                    ) : (
+                      <span className={styles.muted}>Not yet checked</span>
+                    )}
                     <span className={styles.dotSep}>·</span>
                     <span className={styles.muted}>{lawyer.location}</span>
                   </div>
+                  {lawyer.stateBarCouncil && (
+                    <div className={styles.enrolment}>
+                      {lawyer.stateBarCouncil}
+                      {lawyer.enrolmentYear ? `, enrolled ${lawyer.enrolmentYear}` : ''}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -159,6 +210,7 @@ export default function FindLawyerPage() {
         </div>
       )}
     </div>
+    )}
     </>
   );
 }

@@ -1,0 +1,100 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.secondaryBtn,
+.dangerBtn {
+  padding: 0.45rem 0.95rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.secondaryBtn {
+  background: var(--fill-strong);
+  color: var(--label);
+}
+
+.secondaryBtn:hover {
+  background: var(--separator);
+}
+
+.dangerBtn {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.dangerBtn:hover {
+  background: #f9d7d3;
+}
+
+.dangerBtn:disabled {
+  opacity: 0.6;
+}
+
+.confirm {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.confirm ul {
+  padding-left: 1.2rem;
+  color: var(--label-secondary);
+}
+
+.confirm a {
+  color: var(--link);
+}
+
+.confirm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 320px;
+  font-weight: 500;
+}
+
+.confirm input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--separator);
+  font: inherit;
+  font-weight: 400;
+}
+
+.error {
+  color: var(--red);
+}
+
+.status {
+  padding: 0.6rem 0 0;
+  font-size: 0.875rem;
+  color: var(--green);
+}
+
+.note {
+  font-size: 0.8125rem;
+  color: var(--label-tertiary);
+}
+
+.primaryBtn {
+  padding: 0.45rem 0.95rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: var(--accent);
+  color: white;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}

@@ -154,6 +154,35 @@
   gap: 0.6rem;
 }
 
+.consentWrap {
+  margin-bottom: 0.75rem;
+}
+
+.consentLine {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-bottom: 0.6rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--label-secondary);
+}
+
+.consentLine input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.consentLine a {
+  color: var(--link);
+}
+
+.consentHint {
+  margin: -0.3rem 0 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--red);
+}
+
 .form input {
   flex: 1;
   min-width: 0;

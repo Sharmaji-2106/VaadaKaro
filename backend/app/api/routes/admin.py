@@ -1,13 +1,37 @@
-from datetime import datetime
+import json
+from collections import Counter
+from datetime import datetime, timedelta
+from statistics import median
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, status
 
 from app.api.deps import Admin, contains
-from app.models import AuditLog, Complaint, ComplaintStatus, User, UserRole
+from app.api.routes.authorities import needs_recheck
+from app.core.ids import utcnow
+from app.models import (
+    AuditLog,
+    Authority,
+    Booking,
+    BookingStatus,
+    Complaint,
+    ComplaintStatus,
+    LawyerProfile,
+    User,
+    UserRole,
+)
 from app.schemas.auth import UserOut
-from app.schemas.misc import AuditLogOut, DepartmentReport, MonthlyReport, RoleChange
+from app.schemas.legal import AdminLawyerOut, LawyerVerify
+from app.schemas.misc import (
+    AuditLogOut,
+    DepartmentReport,
+    LanguageCount,
+    MonthlyReport,
+    PilotMetrics,
+    RoleChange,
+)
 from app.services.audit import log_action
+from app.services.notifications import notify
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -90,6 +114,115 @@ async def monthly_report(
         total_filed=sum(r.filed for r in departments),
         total_resolved=sum(r.resolved for r in departments),
     )
+
+
+def _rate(part: int, whole: int) -> float | None:
+    return round(part / whole, 3) if whole else None
+
+
+@router.get("/metrics", response_model=PilotMetrics)
+async def pilot_metrics(admin: Admin, days: Annotated[int, Query(ge=1, le=365)] = 30) -> PilotMetrics:
+    since = utcnow() - timedelta(days=days)
+
+    async def count(action: str, **meta: bool) -> int:
+        filters: dict = {"action": action, "created_at": {"$gte": since}}
+        for key, value in meta.items():
+            filters.setdefault("$and", []).append({"metadata_json": {"$regex": f'"{key}": {str(value).lower()}'}})
+        return await AuditLog.find(filters).count()
+
+    drafted_logs = await AuditLog.find({"action": "LETTER_DRAFTED", "created_at": {"$gte": since}}).to_list()
+    drafted = [json.loads(log.metadata_json or "{}") for log in drafted_logs]
+    seconds = [d["seconds"] for d in drafted if isinstance(d.get("seconds"), int | float)]
+    languages = Counter(d.get("inputLanguage") or "unknown" for d in drafted)
+
+    saved_from_drafter = await count("DOCUMENT_SAVED", editedFromAi=True) + await count(
+        "DOCUMENT_SAVED", editedFromAi=False
+    )
+    exported_ids = await AuditLog.distinct(
+        "entity_id", {"action": "DOCUMENT_EXPORTED", "created_at": {"$gte": since}}
+    )
+
+    filed = await Complaint.find(Complaint.created_at >= since).to_list()
+    resolution_days = []
+    for c in filed:
+        if c.status == ComplaintStatus.RESOLVED:
+            resolved_at = next((u.created_at for u in c.updates if u.status == ComplaintStatus.RESOLVED), c.updated_at)
+            resolution_days.append((resolved_at - c.created_at).total_seconds() / 86400)
+
+    authorities = await Authority.find(Authority.is_active == True).to_list()  # noqa: E712
+
+    return PilotMetrics(
+        days=days,
+        users_registered=await count("USER_REGISTERED"),
+        letters_drafted=len(drafted),
+        median_seconds_to_draft=round(median(seconds), 1) if seconds else None,
+        fact_check_pass_rate=_rate(sum(1 for d in drafted if d.get("factCheckPassed")), len(drafted)),
+        input_languages=[LanguageCount(language=k, count=v) for k, v in languages.most_common()],
+        drafts_saved=await count("DOCUMENT_SAVED"),
+        draft_completion_rate=_rate(saved_from_drafter, len(drafted)),
+        draft_correction_rate=_rate(await count("DOCUMENT_SAVED", editedFromAi=True), saved_from_drafter),
+        documents_exported=len(exported_ids),
+        documents_marked_submitted=await count("DOCUMENT_SUBMITTED"),
+        documents_with_response=await count("DOCUMENT_RESPONDED"),
+        complaints_filed=len(filed),
+        complaints_resolved=len(resolution_days),
+        median_days_to_resolution=round(median(resolution_days), 1) if resolution_days else None,
+        bookings_requested=await Booking.find(Booking.created_at >= since).count(),
+        bookings_confirmed=await Booking.find(
+            Booking.created_at >= since,
+            {"status": {"$in": [BookingStatus.CONFIRMED.value, BookingStatus.COMPLETED.value]}},
+        ).count(),
+        authorities_listed=len(authorities),
+        authorities_needing_recheck=sum(1 for a in authorities if needs_recheck(a)),
+    )
+
+
+def _admin_lawyer(profile: LawyerProfile, user: User | None) -> AdminLawyerOut:
+    owner = user.model_dump() if user else {"name": None}
+    return AdminLawyerOut.model_validate({**profile.model_dump(), "user": owner, "email": user.email if user else None})
+
+
+@router.get("/lawyers", response_model=list[AdminLawyerOut])
+async def list_lawyer_profiles(
+    admin: Admin,
+    verified: bool | None = None,
+) -> list[AdminLawyerOut]:
+    """Profiles of current lawyers; unverified ones first, as they are waiting on a bar-number check."""
+    lawyer_users = await User.find({"role": UserRole.LAWYER.value}).to_list()
+    by_id = {u.id: u for u in lawyer_users}
+    filters: dict = {"user_id": {"$in": list(by_id)}}
+    if verified is not None:
+        filters["is_verified"] = verified
+    profiles = await LawyerProfile.find(filters).sort(+LawyerProfile.is_verified, -LawyerProfile.created_at).to_list()
+    return [_admin_lawyer(p, by_id.get(p.user_id)) for p in profiles]
+
+
+@router.patch("/lawyers/{profile_id}/verify", response_model=AdminLawyerOut)
+async def verify_lawyer(profile_id: str, body: LawyerVerify, admin: Admin) -> AdminLawyerOut:
+    profile = await LawyerProfile.get(profile_id)
+    if profile is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Lawyer profile not found")
+    profile.is_verified = body.is_verified
+    await profile.save()
+    await log_action(
+        user_id=admin.id,
+        action="LAWYER_VERIFIED" if body.is_verified else "LAWYER_UNVERIFIED",
+        entity="LAWYER_PROFILE",
+        entity_id=profile.id,
+        metadata={"barNumber": profile.bar_number},
+    )
+    await notify(
+        user_id=profile.user_id,
+        type="LAWYER_VERIFIED" if body.is_verified else "LAWYER_UNVERIFIED",
+        title="Profile verified" if body.is_verified else "Verification removed",
+        message=(
+            "Your bar registration was checked. Citizens now see a verified badge on your profile."
+            if body.is_verified
+            else "Your verified badge was removed. Check that your bar number is correct."
+        ),
+        action_url="/dashboard/lawyer/profile",
+    )
+    return _admin_lawyer(profile, await User.get(profile.user_id))
 
 
 @router.patch("/users/{user_id}/role", response_model=UserOut)

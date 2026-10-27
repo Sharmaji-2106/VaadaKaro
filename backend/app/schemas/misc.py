@@ -71,6 +71,35 @@ class MonthlyReport(ApiModel):
     total_resolved: int
 
 
+class LanguageCount(ApiModel):
+    language: str
+    count: int
+
+
+class PilotMetrics(ApiModel):
+    """The report's success metrics, over the last `days` days. Rates are 0-1, or None without data."""
+
+    days: int
+    users_registered: int
+    letters_drafted: int
+    median_seconds_to_draft: float | None
+    fact_check_pass_rate: float | None
+    input_languages: list[LanguageCount]
+    drafts_saved: int
+    draft_completion_rate: float | None  # saved from the drafter / drafted
+    draft_correction_rate: float | None  # saved after the citizen changed the AI text / saved
+    documents_exported: int
+    documents_marked_submitted: int
+    documents_with_response: int
+    complaints_filed: int
+    complaints_resolved: int
+    median_days_to_resolution: float | None
+    bookings_requested: int
+    bookings_confirmed: int
+    authorities_listed: int
+    authorities_needing_recheck: int
+
+
 class RoleChange(ApiModel):
     role: UserRole
     department: str | None = Field(default=None, max_length=120)

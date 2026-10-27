@@ -207,12 +207,60 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.8125rem;
-  color: #ff9500;
+  color: var(--label-secondary);
 }
 
 .dotSep,
 .muted {
   color: var(--label-secondary);
+}
+
+.verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--green);
+  font-weight: 500;
+}
+
+.enrolment {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  color: var(--label-tertiary);
+}
+
+.disclaimer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.disclaimer h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.disclaimer ul {
+  margin: 0.6rem 0 1.1rem;
+  padding-left: 1.2rem;
+  color: var(--label-secondary);
+}
+
+.disclaimer li + li {
+  margin-top: 0.3rem;
+}
+
+.disclaimerActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 }
 
 .specialization {

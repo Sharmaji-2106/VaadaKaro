@@ -24,6 +24,8 @@ import {
 } from '@/lib/locations';
 import { SearchableSelect, type SelectOption } from '@/components/ui/SearchableSelect/SearchableSelect';
 import { DependentSelect } from '@/components/ui/SearchableSelect/DependentSelect';
+import { AiConsentPrompt } from '@/components/features/privacy/AiConsentPrompt';
+import { isAiConsentError } from '@/services/privacy';
 
 type Errors = Partial<Record<string, string>>;
 type PinStatus = 'idle' | 'loading' | 'found' | 'not-found' | 'failed';
@@ -56,6 +58,7 @@ export const ComplaintForm = ({
   const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [aiResult, setAiResult] = useState<any>(null);
+  const [aiNeedsConsent, setAiNeedsConsent] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -141,6 +144,7 @@ export const ComplaintForm = ({
 
   const handleAIAnalyze = async () => {
     if (!formData.description || !formData.title || !formData.department || !formData.category || aiLoading) return;
+    setAiNeedsConsent(false);
     setAiLoading(true);
     setAiResult(null);
     try {
@@ -152,6 +156,10 @@ export const ComplaintForm = ({
       );
       setAiResult(result);
     } catch (err: any) {
+      if (isAiConsentError(err.message)) {
+        setAiNeedsConsent(true);
+        return;
+      }
       console.warn("AI Analysis failed:", err);
       const errorMessage = err.message === "Unauthorized"
         ? "Please log in to use Quality Verification"
@@ -451,6 +459,8 @@ export const ComplaintForm = ({
                 {aiLoading ? "Checking…" : "Check with AI"}
               </button>
             </div>
+
+            {aiNeedsConsent && <AiConsentPrompt onGranted={handleAIAnalyze} />}
 
             {aiResult && (
               <div className={styles.aiFeedback}>

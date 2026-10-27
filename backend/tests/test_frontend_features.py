@@ -8,7 +8,9 @@ from tests.conftest import complaint_payload
 async def test_legal_advice_guest_and_history(client, make_user, fake_ai):
     fake_ai.responses[LegalAdviceResult] = LegalAdviceResult(answer="File an RTI under the RTI Act, 2005.")
 
-    guest = await client.post("/api/v1/ai/legal-advice", json={"query": "How do I file an RTI?"})
+    # Guests must agree, per question, to it being sent to the AI provider.
+    assert (await client.post("/api/v1/ai/legal-advice", json={"query": "How do I file an RTI?"})).status_code == 403
+    guest = await client.post("/api/v1/ai/legal-advice", json={"query": "How do I file an RTI?", "aiConsent": True})
     assert guest.status_code == 200
     assert "RTI" in guest.json()["response"]
 

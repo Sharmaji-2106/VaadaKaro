@@ -46,6 +46,12 @@ class BookingStatus(enum.StrEnum):
     CANCELLED = "CANCELLED"
 
 
+class SubmissionStatus(enum.StrEnum):
+    DRAFT = "DRAFT"
+    SUBMITTED = "SUBMITTED"  # the citizen says they sent it
+    RESPONDED = "RESPONDED"  # the citizen says the authority replied
+
+
 class _Base(Document):
     id: str = Field(default_factory=new_id)
     created_at: datetime = Field(default_factory=utcnow)
@@ -59,6 +65,16 @@ class _Timestamped(_Base):
         self.updated_at = utcnow()
 
 
+class Nominee(BaseModel):
+    """Embedded in User.nominee."""
+
+    name: str
+    relation: str
+    email: str | None = None
+    phone: str | None = None
+    added_at: datetime = Field(default_factory=utcnow)
+
+
 class User(_Timestamped):
     name: str | None = None
     email: Annotated[str, Indexed(unique=True)]
@@ -70,10 +86,95 @@ class User(_Timestamped):
     location: str | None = None
     department: str | None = None
     is_verified: bool = False
+    # DPDP Act s.9: no verifiable parental-consent flow exists, so accounts are for adults only.
+    adult_confirmed_at: datetime | None = None
+    # Separate, withdrawable consent to send the person's text to the AI provider (Google Gemini).
+    # None means never asked (accounts made before consent was recorded): treated as not given.
+    ai_consent: bool | None = None
+    # Version of the privacy notice the person last agreed to; None for accounts made before
+    # notices were recorded. They are shown the current notice once (DPDP Act s.5(2)).
+    notice_version: str | None = None
+    # DPDP Act s.14: someone who may exercise these rights if the person dies or becomes incapacitated.
+    nominee: Nominee | None = None
 
     class Settings:
         name = "users"
         indexes = [IndexModel([("role", ASCENDING), ("department", ASCENDING)])]
+
+
+class ConsentPurpose(enum.StrEnum):
+    ACCOUNT = "ACCOUNT"  # account, complaints and the services the person asks for
+    AI_PROCESSING = "AI_PROCESSING"  # sending their text to the AI provider
+
+
+class ConsentRecord(_Base):
+    """Append-only proof of consent (DPDP Act s.6(10): the Data Fiduciary must be able to show it)."""
+
+    user_id: Annotated[str, Indexed()]
+    purpose: ConsentPurpose
+    granted: bool  # False records a withdrawal
+    notice_version: str
+
+    class Settings:
+        name = "consent_records"
+
+
+class RequestType(enum.StrEnum):
+    ACCESS = "ACCESS"  # DPDP s.11
+    CORRECTION = "CORRECTION"  # DPDP s.12
+    ERASURE = "ERASURE"  # DPDP s.12
+    NOMINATION = "NOMINATION"  # DPDP s.14
+    PRIVACY_GRIEVANCE = "PRIVACY_GRIEVANCE"  # DPDP s.13
+    CONTENT_COMPLAINT = "CONTENT_COMPLAINT"  # IT Rules 2021 r.3(2)
+    OTHER = "OTHER"
+
+
+class RequestStatus(enum.StrEnum):
+    ACKNOWLEDGED = "ACKNOWLEDGED"
+    IN_PROGRESS = "IN_PROGRESS"
+    RESOLVED = "RESOLVED"
+    REJECTED = "REJECTED"
+
+
+class GrievanceRequest(_Timestamped):
+    """A rights request or grievance to the Grievance Officer, on a 15-day clock."""
+
+    reference: Annotated[str, Indexed(unique=True)]
+    user_id: str | None = None  # None when sent by someone without an account
+    name: str
+    email: str
+    type: RequestType
+    details: str
+    status: RequestStatus = RequestStatus.ACKNOWLEDGED
+    due_at: datetime
+    response: str | None = None
+    resolved_at: datetime | None = None
+    handled_by: str | None = None
+
+    class Settings:
+        name = "grievance_requests"
+        indexes = [IndexModel([("status", ASCENDING), ("due_at", ASCENDING)])]
+
+
+class BreachNotice(_Base):
+    """A personal-data breach and the intimation sent to affected people (DPDP Act s.8(6))."""
+
+    title: str
+    description: str
+    likely_consequences: str
+    mitigation: str
+    occurred_at: datetime | None = None
+    detected_at: datetime
+    affected_user_ids: list[str] = Field(default_factory=list)
+    all_users: bool = False
+    notified_count: int = 0
+    reported_by: str
+    # Filled in by the admin once the reports to the authorities have gone out.
+    cert_in_reported_at: datetime | None = None
+    board_reported_at: datetime | None = None
+
+    class Settings:
+        name = "breach_notices"
 
 
 class UserSettings(Document):
@@ -172,9 +273,45 @@ class LegalDocument(_Timestamped):
     category: str | None = None
     risk_level: str | None = None
     analysis: str | None = None
+    # What the citizen tells us happened after they downloaded it. VaadaKaro never submits a letter
+    # itself, so these are the citizen's own record, never a confirmation from the authority.
+    submission_status: SubmissionStatus = SubmissionStatus.DRAFT
+    submitted_to: str | None = None
+    submission_reference: str | None = None
+    submitted_on: datetime | None = None
+    response_note: str | None = None
+    responded_on: datetime | None = None
 
     class Settings:
         name = "legal_documents"
+
+
+class Authority(_Timestamped):
+    """A verified entry in the authority directory: where a kind of complaint is officially sent.
+
+    The AI only suggests a department; these entries are what we show as the place to submit,
+    each with the source it was checked against and when.
+    """
+
+    name: str
+    department: str  # one of the frontend's DEPARTMENTS
+    categories: list[str] = Field(default_factory=list)  # empty: every category of the department
+    # Jurisdiction: no state means nationwide; a state without a district means the whole state.
+    state: str | None = None
+    district: str | None = None
+    how_to_submit: str
+    submission_url: str | None = None
+    email: str | None = None
+    phone: str | None = None
+    address: str | None = None
+    source_url: str
+    last_verified_at: datetime | None = None  # None: entered but not yet checked against the source
+    verified_by: str | None = None
+    is_active: bool = True
+
+    class Settings:
+        name = "authorities"
+        indexes = [IndexModel([("department", ASCENDING), ("state", ASCENDING), ("district", ASCENDING)])]
 
 
 class AILegalHistory(_Base):
@@ -199,7 +336,12 @@ class LawyerProfile(_Base):
     is_verified: bool = False
     languages: list[str] = Field(default_factory=list)
     bio: str | None = None
+    # Kept for old documents only and never shown: Bar Council of India Rules (Part VI, Ch. II,
+    # r.36) forbid advocates from soliciting work, and ratings or rankings amount to that.
     rating: float = 0
+    # What r.36 lets an advocate publish, and what an admin checks before verifying.
+    state_bar_council: str | None = None
+    enrolment_year: int | None = None
 
     class Settings:
         name = "lawyer_profiles"
@@ -214,6 +356,8 @@ class Booking(_Base):
     description: str
     status: BookingStatus = BookingStatus.PENDING
     is_offline: bool = False
+    # Shown to the citizen: why the lawyer declined, or what to bring to the consultation.
+    lawyer_note: str | None = None
 
     class Settings:
         name = "bookings"
@@ -229,4 +373,8 @@ DOCUMENT_MODELS = [
     AILegalHistory,
     LawyerProfile,
     Booking,
+    Authority,
+    ConsentRecord,
+    GrievanceRequest,
+    BreachNotice,
 ]

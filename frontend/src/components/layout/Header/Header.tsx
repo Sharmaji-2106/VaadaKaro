@@ -6,10 +6,12 @@ import { logoutUser } from '@/services/auth';
 import { LogOut } from 'lucide-react';
 import NotificationCenter from '@/components/features/notifications/NotificationCenter';
 import MobileMenu from './MobileMenu';
+import { NoticeBanner } from '@/components/features/privacy/NoticeBanner';
 
 const NAV_LINKS = [
   { href: '/file-complaint', label: 'File a complaint' },
   { href: '/draft-letter', label: 'Draft a letter' },
+  { href: '/authorities', label: 'Where to complain' },
   { href: '/track-complaint', label: 'Track status' },
   { href: '/ai-assistant', label: 'Legal help' },
   { href: '/find-lawyer', label: 'Find a lawyer' },
@@ -20,6 +22,7 @@ export const Header = async () => {
   const initial = (user?.name || user?.email || 'U').charAt(0).toUpperCase();
 
   return (
+    <>
     <header className={styles.header}>
       <div className={styles.stripe} aria-hidden="true" />
       <div className={styles.mainHeader}>
@@ -62,5 +65,7 @@ export const Header = async () => {
         </div>
       </div>
     </header>
+    {user?.needsNotice && <NoticeBanner />}
+    </>
   );
 };

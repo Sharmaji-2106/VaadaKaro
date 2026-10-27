@@ -1,0 +1,102 @@
+.group {
+  margin-bottom: 1.5rem;
+}
+
+.group h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.75rem;
+}
+
+.tile {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1rem 1.25rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  color: var(--label-secondary);
+}
+
+.value {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--label);
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  font-size: 0.8125rem;
+  color: var(--label-tertiary);
+}
+
+.langTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  font-size: 0.9375rem;
+}
+
+.langTable th {
+  text-align: left;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--label-secondary);
+  padding: 0.7rem 1.25rem 0.5rem;
+  border-bottom: 1px solid var(--separator);
+}
+
+.langTable td {
+  padding: 0.65rem 1.25rem;
+  border-bottom: 1px solid var(--separator);
+  font-variant-numeric: tabular-nums;
+}
+
+.langTable tr:last-child td {
+  border-bottom: none;
+}
+
+.langTable td:nth-child(2) {
+  width: 55%;
+}
+
+.right {
+  text-align: right;
+}
+
+/* Single-hue proportion bar; the percentage beside it carries the value in text ink. */
+.bar {
+  display: inline-block;
+  height: 8px;
+  min-width: 4px;
+  max-width: calc(100% - 3.5rem);
+  border-radius: 0 4px 4px 0;
+  background: var(--accent);
+  vertical-align: middle;
+}
+
+.barLabel {
+  margin-left: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+}
+
+.note {
+  font-size: 0.8125rem;
+  color: var(--label-tertiary);
+  line-height: 1.5;
+  max-width: 70ch;
+}

@@ -8,13 +8,19 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
 from app.api.routes import (
+    account,
     admin,
     ai,
     assistant,
     auth,
+    authorities,
+    bookings,
+    breaches,
     complaints,
     documents,
+    grievances,
     health,
+    lawyer_portal,
     lawyers,
     notifications,
     officer,
@@ -81,9 +87,16 @@ for module in (
     uploads,
     notifications,
     lawyers,
+    bookings,
+    lawyer_portal,
+    authorities,
+    account,
+    grievances,
+    breaches,
     admin,
 ):
     api.include_router(module.router)
+api.include_router(authorities.admin_router)
 
 app.include_router(health.router)
 app.include_router(api)

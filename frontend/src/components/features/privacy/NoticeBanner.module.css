@@ -1,0 +1,51 @@
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1.25rem;
+  padding: 0.75rem 16px;
+  background: var(--navy-soft);
+  border-bottom: 1px solid var(--separator);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.banner p {
+  flex: 1 1 420px;
+  max-width: 860px;
+}
+
+.banner a {
+  color: var(--link);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.primary,
+.secondary {
+  padding: 0.4rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.primary {
+  background: var(--accent);
+  color: white;
+}
+
+.primary:hover {
+  background: var(--accent-hover);
+}
+
+.secondary {
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  text-decoration: none;
+}

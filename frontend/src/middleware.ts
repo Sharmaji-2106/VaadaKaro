@@ -6,6 +6,7 @@ import { readToken } from '@/lib/token';
 const PROTECTED_PREFIXES = ['/dashboard', '/generate-docs', '/draft-letter', '/settings'];
 const OFFICER_PREFIXES = ['/dashboard/officer'];
 const ADMIN_PREFIXES = ['/dashboard/admin'];
+const LAWYER_PREFIXES = ['/dashboard/lawyer'];
 const AUTH_PAGES = ['/login', '/signup'];
 
 const startsWithAny = (pathname: string, prefixes: string[]) =>
@@ -31,6 +32,9 @@ export function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
     if (startsWithAny(pathname, OFFICER_PREFIXES) && claims.role !== 'OFFICER' && claims.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+    if (startsWithAny(pathname, LAWYER_PREFIXES) && claims.role !== 'LAWYER') {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
   }

@@ -6,6 +6,10 @@ import { AlertTriangle, Check, Copy, Download, Mic, MicOff } from 'lucide-react'
 import base from '../generate-docs/generator.module.css';
 import styles from './draft-letter.module.css';
 import { draftLetter, saveDocument, documentPdfUrl, type LetterDraft, type LetterLanguage } from '@/services/legal';
+import { AuthorityCard } from '@/components/features/authorities/AuthorityCard';
+import { AiConsentPrompt } from '@/components/features/privacy/AiConsentPrompt';
+import { isAiConsentError } from '@/services/privacy';
+import authorityStyles from '@/components/features/authorities/AuthorityCard.module.css';
 
 const LANGUAGES: { value: LetterLanguage; label: string; speech: string }[] = [
   { value: 'en', label: 'English', speech: 'en-IN' },
@@ -82,6 +86,10 @@ export default function DraftLetterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await runDraft();
+  };
+
+  const runDraft = async () => {
     recognitionRef.current?.stop();
     setIsPending(true);
     setError('');
@@ -111,7 +119,12 @@ export default function DraftLetterPage() {
   const handleSave = async () => {
     setSaving(true);
     setSaveError('');
-    const result = await saveDocument({ title: subject || 'Complaint letter', content: body, category: draft?.category });
+    const result = await saveDocument({
+      title: subject || 'Complaint letter',
+      content: body,
+      category: draft?.category,
+      editedFromAi: !!draft && (body !== draft.body || subject !== draft.subject),
+    });
     setSaving(false);
     if (result.success) setSavedId(result.document.id);
     else setSaveError(result.error);
@@ -210,6 +223,8 @@ export default function DraftLetterPage() {
                 <div className={base.spinner} />
                 <p>Reading your description and drafting the letter…</p>
               </div>
+            ) : isAiConsentError(error) ? (
+              <AiConsentPrompt onGranted={runDraft} />
             ) : error ? (
               <div className={base.errorState}>
                 <h3>Couldn&apos;t draft the letter</h3>
@@ -249,6 +264,26 @@ export default function DraftLetterPage() {
                   </div>
                 </div>
 
+                <section className={styles.whereToSend} aria-labelledby="where-to-send">
+                  <h2 id="where-to-send">Where to send it</h2>
+                  {draft.authorities.length > 0 ? (
+                    <>
+                      <p className={styles.hint}>
+                        From our directory of official offices. Each entry links to the source we checked it against.
+                      </p>
+                      <div className={authorityStyles.list}>
+                        {draft.authorities.slice(0, 3).map((a) => <AuthorityCard key={a.id} authority={a} />)}
+                      </div>
+                    </>
+                  ) : (
+                    <p className={authorityStyles.empty}>
+                      Our directory has no checked office for this yet. The department above is only the AI&apos;s
+                      suggestion, so confirm the right office with your local administration before you send anything.
+                      You can also <Link href="/authorities">browse the directory</Link>.
+                    </p>
+                  )}
+                </section>
+
                 <div className={styles.letterCard}>
                   <div className={styles.letterHeader}>
                     <h2>Your letter</h2>
@@ -279,7 +314,8 @@ export default function DraftLetterPage() {
                   </div>
                   {savedId && (
                     <p className={styles.hint}>
-                      Saved to <Link href="/generate-docs">your documents</Link>. Further edits here are not saved.
+                      Saved to <Link href="/dashboard/documents">your documents</Link>, where you can also note when
+                      and where you sent it. Further edits here are not saved.
                     </p>
                   )}
                   {saveError && <p className={styles.errorText}>{saveError}</p>}
@@ -304,7 +340,7 @@ export default function DraftLetterPage() {
 
                 <div className={styles.nextStep}>
                   <p>
-                    <strong>Next:</strong> send this letter to the department yourself, or{' '}
+                    <strong>Next:</strong> this is still a draft. Send it to the office yourself, or{' '}
                     <Link href="/file-complaint">file it as a complaint on VaadaKaro</Link> to get a tracking ID.
                   </p>
                   <p className={styles.disclaimerText}>{draft.disclaimer}</p>

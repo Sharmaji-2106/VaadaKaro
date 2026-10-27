@@ -4,7 +4,7 @@ from app.core.security import hash_password, verify_password
 async def test_signup_creates_citizen_and_ignores_role(client):
     r = await client.post(
         "/api/v1/auth/signup",
-        json={"name": "Asha", "email": "Asha@Example.com", "password": "password123", "consent": True, "role": "ADMIN"},
+        json={"name": "Asha", "email": "Asha@Example.com", "password": "password123", "consent": True, "adult": True, "role": "ADMIN"},
     )
     assert r.status_code == 201, r.text
     assert r.json()["role"] == "CITIZEN"
@@ -12,7 +12,7 @@ async def test_signup_creates_citizen_and_ignores_role(client):
 
 
 async def test_signup_requires_consent_and_unique_email(client):
-    body = {"name": "Asha", "email": "a@example.com", "password": "password123", "consent": False}
+    body = {"name": "Asha", "email": "a@example.com", "password": "password123", "consent": False, "adult": True}
     assert (await client.post("/api/v1/auth/signup", json=body)).status_code == 422
 
     body["consent"] = True
@@ -22,7 +22,7 @@ async def test_signup_requires_consent_and_unique_email(client):
 
 async def test_login_and_me(client):
     await client.post(
-        "/api/v1/auth/signup", json={"name": "Ravi", "email": "r@example.com", "password": "password123", "consent": True}
+        "/api/v1/auth/signup", json={"name": "Ravi", "email": "r@example.com", "password": "password123", "consent": True, "adult": True}
     )
     bad = await client.post("/api/v1/auth/login", json={"email": "r@example.com", "password": "wrong-pass"})
     assert bad.status_code == 401

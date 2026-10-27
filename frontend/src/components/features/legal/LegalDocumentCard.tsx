@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Copy, Check, Trash2, Download } from 'lucide-react';
 import { updateLegalDoc, documentPdfUrl } from '@/services/legal';
 import styles from './legal.module.css';
+import SubmissionTracker from './SubmissionTracker';
 
 interface DocProps {
   document: any;
@@ -101,6 +102,7 @@ export default function LegalDocumentCard({ document, onDelete }: DocProps) {
       <div className={styles.docFooter}>
         Check names and addresses before sending.
       </div>
+      <SubmissionTracker document={document} />
     </div>
   );
 }

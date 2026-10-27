@@ -3,11 +3,13 @@ from pymongo.errors import DuplicateKeyError
 
 from app.api.deps import CurrentUser
 from app.core.config import get_settings
+from app.core.ids import utcnow
 from app.core.rate_limit import limiter, login_allowed, record_failed_login
 from app.core.security import create_access_token, hash_password, verify_password
-from app.models import User, UserRole
-from app.schemas.auth import LoginRequest, SignupRequest, TokenResponse, UserOut
+from app.models import ConsentPurpose, User, UserRole
+from app.schemas.auth import LoginRequest, MeOut, SignupRequest, TokenResponse, UserOut
 from app.services.audit import log_action
+from app.services.consent import needs_notice, record_consent
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -29,12 +31,21 @@ async def signup(request: Request, body: SignupRequest) -> User:
     if await User.find_one(User.email == body.email):
         raise HTTPException(status.HTTP_409_CONFLICT, "This email is already registered. Please sign in instead.")
 
-    user = User(name=body.name, email=body.email, password=hash_password(body.password), role=UserRole.CITIZEN)
+    user = User(
+        name=body.name,
+        email=body.email,
+        password=hash_password(body.password),
+        role=UserRole.CITIZEN,
+        adult_confirmed_at=utcnow(),
+        ai_consent=body.ai_consent,
+    )
     try:
         await user.insert()
     except DuplicateKeyError:
         raise HTTPException(status.HTTP_409_CONFLICT, "Email is already in use.")
     await log_action(user_id=user.id, action="USER_REGISTERED", entity="USER", entity_id=user.id)
+    await record_consent(user, ConsentPurpose.ACCOUNT, True)
+    await record_consent(user, ConsentPurpose.AI_PROCESSING, body.ai_consent)
     return user
 
 
@@ -52,6 +63,6 @@ async def login(request: Request, body: LoginRequest) -> TokenResponse:
     return _token_response(user)
 
 
-@router.get("/me", response_model=UserOut)
-async def me(user: CurrentUser) -> User:
-    return user
+@router.get("/me", response_model=MeOut)
+async def me(user: CurrentUser) -> MeOut:
+    return MeOut.model_validate({**user.model_dump(), "needs_notice": needs_notice(user)})

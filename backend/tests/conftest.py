@@ -87,9 +87,20 @@ async def client(mongo, fake_ai):
 def make_user(client):
     """Create a user directly in the DB and return (user_id, auth headers)."""
 
-    async def _make(email: str, role: UserRole = UserRole.CITIZEN, department: str | None = None, name="Test User"):
+    async def _make(
+        email: str,
+        role: UserRole = UserRole.CITIZEN,
+        department: str | None = None,
+        name="Test User",
+        ai_consent: bool = True,
+    ):
         user = await User(
-            email=email, name=name, password=hash_password("password123"), role=role, department=department
+            email=email,
+            name=name,
+            password=hash_password("password123"),
+            role=role,
+            department=department,
+            ai_consent=ai_consent,
         ).insert()
         user_id = user.id
         r = await client.post("/api/v1/auth/login", json={"email": email, "password": "password123"})

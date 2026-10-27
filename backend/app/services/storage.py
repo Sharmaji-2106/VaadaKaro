@@ -54,6 +54,20 @@ def presign_upload(key: str, content_type: str, size: int) -> tuple[str, dict[st
     return url, {"Content-Type": content_type}
 
 
+def delete_user_files(user_id: str) -> int:
+    """Removes everything the user uploaded. Returns how many files were deleted."""
+    s = get_settings()
+    if not s.uploads_enabled:
+        return 0
+    client, deleted = _client(), 0
+    for page in client.get_paginator("list_objects_v2").paginate(Bucket=s.r2_bucket, Prefix=user_prefix(user_id)):
+        keys = [{"Key": o["Key"]} for o in page.get("Contents", [])]
+        if keys:
+            client.delete_objects(Bucket=s.r2_bucket, Delete={"Objects": keys})
+            deleted += len(keys)
+    return deleted
+
+
 def download_url(stored: str) -> str:
     """Legacy rows hold full Cloudinary URLs; new rows hold R2 keys."""
     if stored.startswith(("http://", "https://")):

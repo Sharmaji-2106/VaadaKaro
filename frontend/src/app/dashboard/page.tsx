@@ -1,5 +1,5 @@
 import styles from "./dashboard.module.css";
-import { Plus, Clock, CheckCircle2, MessageSquare, Search, FileText, Scale, ChevronRight, PenLine, ShieldCheck } from "lucide-react";
+import { Plus, Clock, CheckCircle2, MessageSquare, Search, FileText, Scale, ChevronRight, PenLine, ShieldCheck, CalendarDays, Briefcase, Landmark } from "lucide-react";
 import { getCurrentUser } from "@/lib/session";
 import { getUserComplaints, getChatHistory } from "@/services/server";
 import Link from "next/link";
@@ -18,6 +18,9 @@ const quickLinks = [
   { href: "/ai-assistant", icon: <MessageSquare size={18} />, label: "Ask the legal assistant" },
   { href: "/generate-docs", icon: <FileText size={18} />, label: "Draft a legal document" },
   { href: "/find-lawyer", icon: <Scale size={18} />, label: "Find a lawyer" },
+  { href: "/dashboard/documents", icon: <FileText size={18} />, label: "My documents" },
+  { href: "/dashboard/bookings", icon: <CalendarDays size={18} />, label: "My consultations" },
+  { href: "/authorities", icon: <Landmark size={18} />, label: "Where to complain" },
 ];
 
 export default async function Dashboard() {
@@ -76,6 +79,13 @@ export default async function Dashboard() {
                 <Link href="/dashboard/officer" className={styles.quickLink}>
                   <span className={styles.quickIcon}><ShieldCheck size={18} /></span>
                   <span>{user.role === "ADMIN" ? "Officer & admin panel" : "Officer panel"}</span>
+                  <ChevronRight size={16} className={styles.quickChevron} />
+                </Link>
+              )}
+              {user?.role === "LAWYER" && (
+                <Link href="/dashboard/lawyer" className={styles.quickLink}>
+                  <span className={styles.quickIcon}><Briefcase size={18} /></span>
+                  <span>Lawyer portal</span>
                   <ChevronRight size={16} className={styles.quickChevron} />
                 </Link>
               )}

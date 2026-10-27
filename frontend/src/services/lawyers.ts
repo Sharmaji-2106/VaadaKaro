@@ -11,7 +11,8 @@ export interface Lawyer {
   isVerified: boolean;
   languages: string[];
   bio: string | null;
-  rating: number;
+  stateBarCouncil: string | null;
+  enrolmentYear: number | null;
   user: { name: string | null; image?: string | null };
 }
 

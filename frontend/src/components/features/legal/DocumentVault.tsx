@@ -6,7 +6,8 @@ import LegalDocumentCard from './LegalDocumentCard';
 import { Search } from 'lucide-react';
 import styles from './legal.module.css';
 
-export default function DocumentVault() {
+/** `empty` is shown when the user has no documents; without it the vault renders nothing. */
+export default function DocumentVault({ empty }: { empty?: React.ReactNode } = {}) {
   const [docs, setDocs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,7 +42,7 @@ export default function DocumentVault() {
   }
 
   if (docs.length === 0) {
-    return null;
+    return empty ? <div className={styles.vaultStatus}>{empty}</div> : null;
   }
 
   return (

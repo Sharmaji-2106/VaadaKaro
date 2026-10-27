@@ -31,7 +31,7 @@ const sections = [
       <>
         <p>To use VaadaKaro, you must meet the following eligibility requirements:</p>
         <ul>
-          <li>You must be at least <strong>18 years of age</strong>. If you are under 18, you may only use the Platform under the direct supervision and with the express consent of a parent or legal guardian.</li>
+          <li>You must be at least <strong>18 years of age</strong> to create an account. We do not offer the verifiable parental consent the Digital Personal Data Protection Act, 2023 requires for children, so a parent or guardian should file on a child&apos;s behalf from their own account.</li>
           <li>You must be a resident of India or filing a complaint related to an incident occurring within India's jurisdiction.</li>
           <li>You must have the legal capacity to enter into binding contracts under applicable Indian law.</li>
           <li>You must not have been previously suspended or permanently banned from the Platform for policy violations.</li>
@@ -154,7 +154,28 @@ const sections = [
           <li>Scraping data from the Platform without express written consent.</li>
           <li>Using the Platform to facilitate any illegal activity under Indian law.</li>
         </ul>
-        <p>Violation of this policy may result in immediate account suspension, permanent termination, reporting to law enforcement, and/or civil legal action.</p>
+        <p>
+          As the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021 (rule
+          3(1)(b)) require, you must not upload, share or store anything that:
+        </p>
+        <ul>
+          <li>belongs to someone else and you have no right to;</li>
+          <li>is obscene, pornographic, paedophilic, invasive of another person&apos;s privacy (including bodily privacy), or insulting or harassing on the basis of gender;</li>
+          <li>is defamatory, racially or ethnically objectionable, or encourages money laundering or gambling;</li>
+          <li>is harmful to children;</li>
+          <li>infringes a patent, trademark, copyright or other proprietary right;</li>
+          <li>deceives or misleads about where a message came from, or knowingly spreads information that is patently false or misleading;</li>
+          <li>impersonates another person;</li>
+          <li>threatens the unity, integrity, defence, security or sovereignty of India, friendly relations with foreign States or public order, incites an offence, or obstructs the investigation of an offence;</li>
+          <li>contains software viruses or other code meant to interrupt, destroy or limit any computer resource;</li>
+          <li>violates any law in force in India.</li>
+        </ul>
+        <p>
+          A complaint you file about a real problem, made in good faith, may naturally name the office or person
+          responsible: that is expected. Report content you believe breaks these rules to the{' '}
+          <Link href="/grievance">Grievance Officer</Link>.
+        </p>
+        <p>Violation of this policy may result in removal of the content, account suspension or termination, and reporting to law enforcement where the law requires.</p>
       </>
     ),
   },
@@ -250,7 +271,12 @@ const sections = [
           Support: <strong>support@vaadakaro.in</strong><br />
           Grievance Officer: <strong>grievance@vaadakaro.in</strong>
         </div>
-        <p>We aim to respond to all legal inquiries within 7 business days.</p>
+        <p>
+          Complaints to the Grievance Officer, including about content on the Platform or your personal data, are
+          acknowledged within 24 hours and resolved within 15 days, as rule 3(2) of the IT (Intermediary Guidelines and
+          Digital Media Ethics Code) Rules, 2021 requires. Send them through the{' '}
+          <Link href="/grievance">Grievance Officer page</Link> to get a reference number.
+        </p>
       </>
     ),
   },

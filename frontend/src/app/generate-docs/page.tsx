@@ -7,6 +7,8 @@ import { generateLegalDrafts } from '@/services/legal';
 import AnalysisDashboard from '@/components/features/legal/AnalysisDashboard';
 import LegalDocumentCard from '@/components/features/legal/LegalDocumentCard';
 import DocumentVault from '@/components/features/legal/DocumentVault';
+import { AiConsentPrompt } from '@/components/features/privacy/AiConsentPrompt';
+import { isAiConsentError } from '@/services/privacy';
 
 export default function GenerateDocsPage() {
   const [formData, setFormData] = useState({
@@ -20,6 +22,10 @@ export default function GenerateDocsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await generate();
+  };
+
+  const generate = async () => {
     if (!formData.issue || !formData.description) return;
 
     setIsPending(true);
@@ -121,6 +127,8 @@ export default function GenerateDocsPage() {
               <div className={styles.spinner} />
               <p>Analysing your case and drafting documents…</p>
             </div>
+          ) : isAiConsentError(error) ? (
+            <AiConsentPrompt onGranted={generate} />
           ) : error ? (
             <div className={styles.errorState}>
               <h3>Couldn't generate drafts</h3>

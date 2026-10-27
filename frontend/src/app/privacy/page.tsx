@@ -1,11 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@/app/legal.module.css';
-import { Lock, ChevronDown, Database, Eye, Share2, ShieldCheck, User, Cookie, Bell, Mail, ArrowRight } from 'lucide-react';
+import {
+  Lock,
+  ChevronDown,
+  Database,
+  Eye,
+  Share2,
+  ShieldCheck,
+  User,
+  Cookie,
+  Bell,
+  Mail,
+  ArrowRight,
+  Clock,
+  Baby,
+  AlertTriangle,
+  Languages,
+} from 'lucide-react';
 import Link from 'next/link';
+import { getGrievanceOfficer, type GrievanceOfficer } from '@/services/privacy';
 
-const sections = [
+// Keep in step with PRIVACY_NOTICE_VERSION in the backend config: consents record this version.
+const NOTICE_VERSION = '2026-10-26';
+const EFFECTIVE = '26 October 2026';
+
+function OfficerContact({ officer }: { officer: GrievanceOfficer | null }) {
+  const email = officer?.email ?? 'grievance@vaadakaro.in';
+  return (
+    <div className={styles.highlightBox}>
+      <strong>Grievance Officer:</strong> {officer?.name || 'Grievance Officer, VaadaKaro'}
+      <br />
+      <strong>Email:</strong> <a href={`mailto:${email}`}>{email}</a>
+      {officer?.address && (
+        <>
+          <br />
+          <strong>Address:</strong> {officer.address}
+        </>
+      )}
+      <br />
+      <strong>Timelines:</strong> acknowledged within {officer?.acknowledgeWithinHours ?? 24} hours, answered within{' '}
+      {officer?.resolveWithinDays ?? 15} days.
+      <br />
+      Or use the <Link href="/grievance">Grievance Officer page</Link>.
+    </div>
+  );
+}
+
+const buildSections = (officer: GrievanceOfficer | null) => [
   {
     id: 'collection',
     num: '01',
@@ -13,24 +56,26 @@ const sections = [
     title: 'Data We Collect',
     content: (
       <>
-        <p>VaadaKaro collects the following categories of information to provide its services effectively:</p>
-        <h3>Identity & Contact Data</h3>
+        <p>VaadaKaro is the Data Fiduciary for the personal data below. We collect only what each service needs:</p>
+        <h3>Account</h3>
         <ul>
-          <li><strong>Name, email address, phone number</strong> — collected during account registration.</li>
-          <li><strong>Profile information</strong> — location (State/City), preferred departments, and notification settings.</li>
+          <li><strong>Name, email address and password</strong> (stored only as a one-way hash), and your confirmation that you are 18 or older.</li>
+          <li><strong>Optional:</strong> phone number, and a nominee you choose (their name, relation and contact).</li>
         </ul>
-        <h3>Complaint & Case Data</h3>
+        <h3>Complaints and documents</h3>
         <ul>
-          <li><strong>Complaint details</strong> — title, detailed description, category, department, and incident location.</li>
-          <li><strong>Evidence & Attachments</strong> — images, PDFs, and documents you upload to support your grievance.</li>
-          <li><strong>AI legal queries</strong> — input text you provide to the AI Legal Assistant.</li>
-          <li><strong>Generated documents</strong> — drafts produced by the platform and stored in your secure vault.</li>
+          <li><strong>Complaints:</strong> title, description, category, department, address and PIN code of the incident.</li>
+          <li><strong>Attachments</strong> you upload as evidence (images and PDFs, up to 10 MB each).</li>
+          <li><strong>Documents and letters</strong> you save, and where and when you say you sent them.</li>
+          <li><strong>Legal assistant questions</strong> and answers, if you are signed in.</li>
+          <li><strong>Lawyer consultations</strong> you request, and what you write in them.</li>
         </ul>
-        <h3>Technical & Usage Data</h3>
+        <h3>Technical</h3>
         <ul>
-          <li>IP address, browser type, device information, and session metadata.</li>
-          <li>Usage analytics — how you interact with platform features and AI tools.</li>
+          <li>Your IP address, used briefly to limit repeated requests and sign-in attempts.</li>
+          <li>A record of important actions (for example, sign-up, consent, status changes), kept for security.</li>
         </ul>
+        <p>We do not use advertising or analytics trackers.</p>
       </>
     ),
   },
@@ -38,20 +83,18 @@ const sections = [
     id: 'purpose',
     num: '02',
     icon: Eye,
-    title: 'Why We Collect This Data',
+    title: 'Why We Use It',
     content: (
       <>
-        <p>Your data is used exclusively for the following lawful purposes under the DPDP Act 2023:</p>
         <ul>
-          <li><strong>Service Delivery:</strong> To facilitate complaint filing, tracking, and AI-assisted document generation.</li>
-          <li><strong>Communication:</strong> To send status updates, alerts, and essential platform notifications.</li>
-          <li><strong>AI Processing:</strong> To generate contextually relevant legal guidance and document drafts.</li>
-          <li><strong>Security & Safety:</strong> To detect fraud, prevent platform abuse, and ensure safe usage.</li>
-          <li><strong>Platform Improvement:</strong> To fix technical bugs and enhance AI accuracy through anonymized analytics.</li>
+          <li><strong>Running your account and the services you ask for</strong> (filing, tracking, drafting, consultations), on the consent you give at sign-up.</li>
+          <li><strong>AI drafting and the legal assistant</strong>, only with your separate consent (section 04).</li>
+          <li><strong>Telling you about your complaints</strong>, consultations and requests.</li>
+          <li><strong>Security:</strong> preventing abuse and investigating incidents.</li>
+          <li><strong>Measuring whether the service works</strong>, using counts (for example, how many letters were drafted), never the text of your complaints or letters.</li>
+          <li><strong>Complying with Indian law</strong>, for example a lawful order from a court or authority.</li>
         </ul>
-        <div className={styles.highlightBox}>
-          VaadaKaro does NOT sell your personal data to advertisers or third-party data brokers. We do not use your data for marketing profiling.
-        </div>
+        <div className={styles.highlightBox}>We do not sell your personal data or use it for advertising.</div>
       </>
     ),
   },
@@ -59,17 +102,22 @@ const sections = [
     id: 'storage',
     num: '03',
     icon: Lock,
-    title: 'Secure Document Storage',
+    title: 'Storage, Security and Retention',
     content: (
       <>
-        <p>Evidence, legal documents, and complaint files are stored using industrial-grade security:</p>
         <ul>
-          <li><strong>Encryption:</strong> Files are encrypted at rest using AES-256 and in transit via TLS 1.3.</li>
-          <li><strong>Secure Cloud:</strong> Evidence is stored in a private Cloudflare R2 bucket and can only be read through short-lived, signed links.</li>
-          <li><strong>Vault Isolation:</strong> Your generated legal documents are stored in an isolated database environment tied strictly to your unique User ID.</li>
-          <li><strong>Access Control:</strong> Only you and authorized governmental officers (for filed cases) can access your complaint data.</li>
+          <li>Traffic to VaadaKaro uses HTTPS. Our database (MongoDB Atlas) and file storage (Cloudflare R2) encrypt data at rest.</li>
+          <li>Attachments are in a private bucket and can be opened only through links that expire within minutes.</li>
+          <li>Officers see only complaints of their own department. Access is checked on our servers for every request.</li>
+          <li>Our service providers may store data outside India. The DPDP Act, 2023 allows this except to countries the Government of India restricts.</li>
         </ul>
-        <p>Data is retained for as long as your account is active or as required by Indian law (e.g., for active legal proceedings).</p>
+        <h3>How long we keep it</h3>
+        <ul>
+          <li><strong>Account, documents, consultations:</strong> until you delete your account.</li>
+          <li><strong>Complaints:</strong> until you delete your account. Complaints a department is already handling then stay in its records without your name, address, PIN code or attachments.</li>
+          <li><strong>Read notifications:</strong> 180 days. <strong>Legal assistant history:</strong> 1 year.</li>
+          <li><strong>Security logs and consent records:</strong> at least 1 year, as Indian rules require; they hold account ids, not your complaint text.</li>
+        </ul>
       </>
     ),
   },
@@ -77,20 +125,22 @@ const sections = [
     id: 'ai-processing',
     num: '04',
     icon: ShieldCheck,
-    title: 'AI Data Processing Disclosure',
+    title: 'AI Processing (Google Gemini)',
     content: (
       <>
         <div className={styles.alertBox + ' ' + styles.alertInfo}>
           <Eye size={20} />
-          <p>When you use the AI Assistant, your input text is processed by Google Gemini AI services to generate responses.</p>
+          <p>
+            The AI tools send what you type to Google Gemini, which may process it outside India. This happens only if
+            you agree: at sign-up, in Settings, or (without an account) with each question.
+          </p>
         </div>
-        <p>Key AI Privacy Principles:</p>
         <ul>
-          <li><strong>No Training:</strong> VaadaKaro does not use your personal case details to train its proprietary models.</li>
-          <li><strong>Data Minimization:</strong> Only relevant complaint context is shared with the AI infrastructure to generate meaningful guidance.</li>
-          <li><strong>Session History:</strong> AI interactions are stored in your private history for your convenience; you may clear this history at any time.</li>
+          <li>Filing and tracking complaints never needs AI consent.</li>
+          <li>You can withdraw consent at any time in <Link href="/dashboard/settings">Settings</Link>. It stops AI processing at once and erases your legal assistant history; documents you chose to save stay until you delete them.</li>
+          <li>Google handles the text under its own terms for the Gemini API; depending on the plan, Google may keep it for a limited time. Don&apos;t include ID numbers (Aadhaar, PAN) or other people&apos;s details you don&apos;t need to.</li>
+          <li>AI output is information, not legal advice, and can be wrong. Check everything before you use it.</li>
         </ul>
-        <p>By using AI features, you consent to this specific processing for the purpose of receiving informational legal guidance.</p>
       </>
     ),
   },
@@ -98,93 +148,160 @@ const sections = [
     id: 'sharing',
     num: '05',
     icon: Share2,
-    title: 'Data Sharing & Disclosure',
+    title: 'Who We Share It With',
     content: (
       <>
-        <div className={styles.highlightBox}>
-          We share your data only when necessary to fulfill your requests or comply with the law.
-        </div>
-        <p>Sharing scenarios include:</p>
         <ul>
-          <li><strong>Authorities:</strong> When you file a formal complaint, relevant details are shared with the designated department (e.g., Police, Municipal Corp) for resolution.</li>
-          <li><strong>Service Providers:</strong> Cloud hosting (Vercel), AI (Google), and storage (Cloudflare R2) providers that help us run the platform.</li>
-          <li><strong>Legal Mandate:</strong> In response to a valid court order, search warrant, or legal requirement under Indian law.</li>
+          <li><strong>The department you file with:</strong> its officers on VaadaKaro see your complaint so they can act on it.</li>
+          <li><strong>A lawyer you book:</strong> your name and what you wrote; your email and phone only once they confirm.</li>
+          <li><strong>Service providers</strong> that run VaadaKaro for us: Vercel (website), Render (servers), MongoDB Atlas (database), Cloudflare (file storage) and Google (AI, with your consent).</li>
+          <li><strong>Authorities</strong> when Indian law requires it, for example a court order.</li>
         </ul>
-      </>
-    ),
-  },
-  {
-    id: 'security',
-    num: '06',
-    icon: Lock,
-    title: 'Multi-Layered Security',
-    content: (
-      <>
-        <p>VaadaKaro implements a robust security architecture:</p>
-        <ul>
-          <li><strong>Session Security:</strong> Powered by NextAuth with secure session cookies and CSRF protection.</li>
-          <li><strong>Role-Based Access:</strong> Strict separation between Citizen data and Officer interfaces.</li>
-          <li><strong>Input Sanitization:</strong> All submissions undergo server-side validation to prevent injection attacks and XSS.</li>
-          <li><strong>Audit Logging:</strong> Critical actions are logged to maintain an immutable record of case handling.</li>
-        </ul>
+        <p>Anyone with a complaint&apos;s tracking ID can see its status and history, but not the description, address or files.</p>
       </>
     ),
   },
   {
     id: 'rights',
-    num: '07',
+    num: '06',
     icon: User,
-    title: 'Your Rights (DPDP Act 2023)',
+    title: 'Your Rights (DPDP Act, 2023)',
     content: (
       <>
-        <p>As a user in India, you have the following rights regarding your digital personal data:</p>
         <ul>
-          <li><strong>Right to Access:</strong> Request a summary of the data we hold about you.</li>
-          <li><strong>Right to Correction:</strong> Update or correct inaccurate personal information.</li>
-          <li><strong>Right to Erasure:</strong> Request the deletion of your account and related personal data.</li>
-          <li><strong>Right to Withdraw Consent:</strong> Withdraw your consent for data processing at any time (though some services may become unavailable).</li>
-          <li><strong>Right to Grievance Redressal:</strong> Contact our Grievance Officer if your privacy concerns are not addressed.</li>
+          <li><strong>Access (s.11):</strong> download everything we hold about you from Settings › Your data.</li>
+          <li><strong>Correction and erasure (s.12):</strong> correct details through the <Link href="/grievance">Grievance Officer</Link>, or delete your account yourself in Settings.</li>
+          <li><strong>Withdraw consent (s.6):</strong> as easily as you gave it, in Settings.</li>
+          <li><strong>Nominate (s.14):</strong> choose someone to use these rights if you die or cannot act, in Settings.</li>
+          <li><strong>Grievance redressal (s.13):</strong> through the <Link href="/grievance">Grievance Officer</Link>. If you are not satisfied, you may complain to the Data Protection Board of India.</li>
         </ul>
-        <p>To exercise these rights, email: <strong>privacy@vaadakaro.in</strong></p>
+        <p>
+          This notice is in English, Hindi and Marathi. To read it in another language listed in the Eighth Schedule to
+          the Constitution, ask the <Link href="/grievance">Grievance Officer</Link> and we will send it to you.
+        </p>
       </>
+    ),
+  },
+  {
+    id: 'children',
+    num: '07',
+    icon: Baby,
+    title: 'Children',
+    content: (
+      <p>
+        Accounts are only for people aged 18 or over, because the DPDP Act requires verifiable parental consent for
+        children&apos;s data and we do not offer that. A parent or guardian can file a complaint on a child&apos;s behalf
+        from their own account.
+      </p>
+    ),
+  },
+  {
+    id: 'breach',
+    num: '08',
+    icon: AlertTriangle,
+    title: 'If Something Goes Wrong',
+    content: (
+      <p>
+        If a breach affects your personal data, we will tell you without delay, in the app and through the contact
+        details you gave us, with what
+        happened, what it may mean for you and what to do. We also report it to the Data Protection Board of India and
+        CERT-In as the law requires.
+      </p>
     ),
   },
   {
     id: 'cookies',
-    num: '08',
+    num: '09',
     icon: Cookie,
-    title: 'Cookies & Trackers',
+    title: 'Cookies',
     content: (
-      <>
-        <p>We use essential cookies to maintain your login session and remember your preferences. We do NOT use third-party advertising cookies or cross-site tracking pixels. You can manage cookies through your browser settings.</p>
-      </>
+      <p>
+        One essential cookie keeps you signed in. It cannot be read by scripts on the page. We use no advertising or
+        tracking cookies.
+      </p>
+    ),
+  },
+  {
+    id: 'hindi',
+    num: '10',
+    icon: Languages,
+    title: 'हिन्दी में सारांश',
+    content: (
+      <div lang="hi">
+        <p>
+          VaadaKaro आपका नाम, ईमेल, आपकी शिकायतें, अपलोड की गई फ़ाइलें और आपके सहेजे गए दस्तावेज़ इसलिए रखता है ताकि आप
+          शिकायत दर्ज कर सकें, उसकी स्थिति देख सकें और पत्र तैयार कर सकें। आपकी शिकायत संबंधित विभाग के अधिकारियों को दिखाई
+          देती है।
+        </p>
+        <p>
+          AI सुविधाएँ (पत्र का मसौदा, कानूनी सहायक) वैकल्पिक हैं। आपकी सहमति होने पर ही आपका लिखा हुआ Google Gemini को भेजा
+          जाता है, जो इसे भारत के बाहर भी प्रोसेस कर सकता है। यह सहमति आप कभी भी Settings में वापस ले सकते हैं।
+        </p>
+        <p>
+          आपके अधिकार (डिजिटल व्यक्तिगत डेटा संरक्षण अधिनियम, 2023): अपने डेटा की जानकारी पाना, उसे सुधरवाना या मिटवाना,
+          सहमति वापस लेना, नामांकित व्यक्ति (nominee) चुनना और शिकायत करना। Settings › Your data से आप अपना डेटा डाउनलोड
+          कर सकते हैं या खाता हटा सकते हैं।
+        </p>
+        <p>
+          शिकायत अधिकारी: {officer?.email ?? 'grievance@vaadakaro.in'}। पावती 24 घंटे में, उत्तर 15 दिन में। संतुष्ट न होने
+          पर आप भारतीय डेटा संरक्षण बोर्ड से शिकायत कर सकते हैं। खाता केवल 18 वर्ष या उससे अधिक आयु के लोगों के लिए है।
+        </p>
+      </div>
+    ),
+  },
+  {
+    id: 'marathi',
+    num: '11',
+    icon: Languages,
+    title: 'मराठीत सारांश',
+    content: (
+      <div lang="mr">
+        <p>
+          VaadaKaro तुमचे नाव, ईमेल, तुमच्या तक्रारी, अपलोड केलेल्या फाइल्स आणि तुम्ही जतन केलेले दस्तऐवज ठेवते, जेणेकरून
+          तुम्ही तक्रार नोंदवू शकाल, तिची स्थिती पाहू शकाल आणि पत्र तयार करू शकाल. तुमची तक्रार संबंधित विभागाच्या
+          अधिकाऱ्यांना दिसते.
+        </p>
+        <p>
+          AI सुविधा (पत्राचा मसुदा, कायदेशीर सहाय्यक) ऐच्छिक आहेत. तुमची संमती असेल तरच तुम्ही लिहिलेला मजकूर Google
+          Gemini कडे पाठवला जातो, जो त्यावर भारताबाहेरही प्रक्रिया करू शकतो. ही संमती तुम्ही कधीही Settings मध्ये मागे घेऊ
+          शकता.
+        </p>
+        <p>
+          तुमचे अधिकार (डिजिटल वैयक्तिक डेटा संरक्षण अधिनियम, 2023): तुमच्या डेटाची माहिती मिळवणे, तो दुरुस्त करणे किंवा
+          पुसून टाकणे, संमती मागे घेणे, नामनिर्देशित व्यक्ती (nominee) नेमणे आणि तक्रार करणे. Settings › Your data मधून
+          तुम्ही तुमचा डेटा डाउनलोड करू शकता किंवा खाते हटवू शकता.
+        </p>
+        <p>
+          तक्रार अधिकारी: {officer?.email ?? 'grievance@vaadakaro.in'}. पोच 24 तासांत, उत्तर 15 दिवसांत. समाधान न झाल्यास तुम्ही
+          भारतीय डेटा संरक्षण मंडळाकडे तक्रार करू शकता. खाते फक्त 18 वर्षे किंवा त्याहून अधिक वयाच्या व्यक्तींसाठी आहे.
+        </p>
+      </div>
     ),
   },
   {
     id: 'updates',
-    num: '09',
+    num: '12',
     icon: Bell,
-    title: 'Changes to this Policy',
+    title: 'Changes to this Notice',
     content: (
-      <>
-        <p>We may update this Privacy Policy periodically. Substantial changes will be notified to you via in-app notification or email. Your continued use of VaadaKaro after such updates constitutes acceptance of the new policy.</p>
-      </>
+      <p>
+        When this notice changes in a way that affects how we use your data, we will tell you in the app and ask for
+        your consent again where the law requires it. Each consent you give is recorded with the version of the notice
+        you saw (this is version {NOTICE_VERSION}).
+      </p>
     ),
   },
   {
     id: 'contact',
-    num: '10',
+    num: '13',
     icon: Mail,
-    title: 'Privacy Contact',
+    title: 'Grievance Officer',
     content: (
       <>
-        <p>For all data-related queries:</p>
-        <div className={styles.highlightBox}>
-          <strong>Grievance Officer:</strong> grievance@vaadakaro.in<br />
-          <strong>Privacy Team:</strong> privacy@vaadakaro.in<br />
-          <strong>Response Time:</strong> Within 30 days as per DPDP Act guidelines.
-        </div>
-        <p>Last Revised: <strong>June 16, 2026</strong></p>
+        <OfficerContact officer={officer} />
+        <p>
+          <Clock size={14} style={{ verticalAlign: '-2px' }} /> Last revised: <strong>{EFFECTIVE}</strong>
+        </p>
       </>
     ),
   },
@@ -192,6 +309,16 @@ const sections = [
 
 export default function PrivacyPage() {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(['collection']));
+  const [officer, setOfficer] = useState<GrievanceOfficer | null>(null);
+
+  useEffect(() => {
+    getGrievanceOfficer().then((r) => r.success && setOfficer(r.data));
+    // Links such as /privacy#hindi open that section.
+    const hash = window.location.hash.slice(1);
+    if (hash) setOpenSections((prev) => new Set([...prev, hash]));
+  }, []);
+
+  const sections = buildSections(officer);
 
   const toggle = (id: string) => {
     setOpenSections(prev => {
@@ -205,16 +332,18 @@ export default function PrivacyPage() {
     <div className={styles.legalPage}>
       <div className={styles.hero}>
         <div className={styles.heroEyebrow}>
-          <Lock size={14} /> Legal Document
+          <Lock size={14} /> Privacy notice
         </div>
         <h1 className={styles.heroTitle}>Privacy Policy</h1>
         <p className={styles.heroSubtitle}>
-          Your privacy is foundational to VaadaKaro. This policy explains what we collect, why, and how we protect it.
+          What we collect, why, how long we keep it, and your rights under the Digital Personal Data Protection Act,
+          2023. Also in <a href="#hindi" onClick={() => setOpenSections(prev => new Set([...prev, 'hindi']))}>हिन्दी</a> and{' '}
+          <a href="#marathi" onClick={() => setOpenSections(prev => new Set([...prev, 'marathi']))}>मराठी</a>.
         </p>
         <div className={styles.heroMeta}>
-          <span className={styles.heroMetaItem}><strong>Effective Date:</strong> June 16, 2025</span>
-          <span className={styles.heroMetaItem}><strong>Version:</strong> 1.0</span>
-          <span className={styles.heroMetaItem}><strong>Jurisdiction:</strong> India (DPDP Act 2023)</span>
+          <span className={styles.heroMetaItem}><strong>Effective:</strong> {EFFECTIVE}</span>
+          <span className={styles.heroMetaItem}><strong>Version:</strong> {NOTICE_VERSION}</span>
+          <span className={styles.heroMetaItem}><strong>Law:</strong> DPDP Act 2023, IT Act 2000</span>
         </div>
       </div>
 
@@ -251,10 +380,10 @@ export default function PrivacyPage() {
         })}
 
         <div className={styles.bottomCta}>
-          <h2>Questions About Your Data?</h2>
-          <p>Manage your notification preferences and data settings from your account.</p>
+          <h2>Manage your data</h2>
+          <p>Download your data, change AI consent, add a nominee or delete your account.</p>
           <Link href="/dashboard/settings" className={styles.ctaBtn}>
-            Open Account Settings <ArrowRight size={18} />
+            Open Settings <ArrowRight size={18} />
           </Link>
         </div>
       </div>

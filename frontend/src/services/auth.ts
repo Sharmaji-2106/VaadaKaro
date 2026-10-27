@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { TOKEN_COOKIE } from '@/lib/api/config';
 import { serverApi } from '@/lib/api/server';
 
@@ -14,8 +15,12 @@ interface LoginResponse {
 }
 
 export async function registerUser(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (formData.get('adult') !== 'on') {
+    // DPDP Act s.9: without a verifiable parental-consent process, accounts are for adults only.
+    return { error: 'You must be 18 or older to create an account. A parent or guardian can file on your behalf.' };
+  }
   if (formData.get('consent') !== 'on') {
-    return { error: 'You must agree to the Terms of service and Privacy policy.' };
+    return { error: 'You must agree to the privacy notice and Terms of service.' };
   }
 
   const res = await serverApi('/auth/signup', {
@@ -25,6 +30,8 @@ export async function registerUser(_prev: FormState, formData: FormData): Promis
       email: String(formData.get('email') || '').trim(),
       password: String(formData.get('password') || ''),
       consent: true,
+      adult: true,
+      aiConsent: formData.get('aiConsent') === 'on',
     },
   });
 
@@ -57,7 +64,8 @@ export async function loginUser(_prev: FormState, formData: FormData): Promise<F
 
   const callbackUrl = String(formData.get('callbackUrl') || '');
   const role = res.data.user.role;
-  const fallback = role === 'OFFICER' || role === 'ADMIN' ? '/dashboard/officer' : '/dashboard';
+  const fallback =
+    role === 'OFFICER' || role === 'ADMIN' ? '/dashboard/officer' : role === 'LAWYER' ? '/dashboard/lawyer' : '/dashboard';
   // Only same-site paths, never an absolute URL from the query string.
   redirect(callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') ? callbackUrl : fallback);
 }
@@ -65,4 +73,19 @@ export async function loginUser(_prev: FormState, formData: FormData): Promise<F
 export async function logoutUser() {
   (await cookies()).delete(TOKEN_COOKIE);
   redirect('/login');
+}
+
+/** Records that the signed-in person has seen the current privacy notice. */
+export async function acknowledgeNotice() {
+  await serverApi('/account/notice/acknowledge', { method: 'POST' });
+  revalidatePath('/', 'layout');
+}
+
+/** Permanently deletes the signed-in account (password required), then signs out. */
+export async function deleteAccount(_prev: FormState, formData: FormData): Promise<FormState> {
+  if (formData.get('confirm') !== 'DELETE') return { error: 'Type DELETE to confirm.' };
+  const res = await serverApi('/account', { method: 'DELETE', json: { password: String(formData.get('password') || '') } });
+  if (!res.ok) return { error: res.status === 403 ? 'That password is incorrect.' : res.error };
+  (await cookies()).delete(TOKEN_COOKIE);
+  redirect('/?accountDeleted=1');
 }

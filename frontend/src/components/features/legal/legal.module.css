@@ -185,6 +185,92 @@
   color: var(--label-tertiary);
 }
 
+/* Submission record: draft → sent → reply */
+.tracker {
+  padding: 0.75rem 1.5rem 0.9rem;
+  border-top: 1px solid var(--separator);
+  background: var(--fill);
+}
+
+.trackerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+}
+
+.trackerBadge {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--fill-strong);
+  color: var(--label-secondary);
+}
+
+.trackerBadge[data-status="SUBMITTED"] { background: var(--blue-soft); color: var(--blue); }
+.trackerBadge[data-status="RESPONDED"] { background: var(--green-soft); color: var(--green); }
+
+.trackerText {
+  flex: 1 1 200px;
+  font-size: 0.875rem;
+  color: var(--label-secondary);
+}
+
+.trackerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.trackerNote {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.trackerForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.trackerForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--label-secondary);
+}
+
+.trackerForm input,
+.trackerForm textarea {
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--separator);
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--label);
+}
+
+.trackerWide {
+  grid-column: 1 / -1;
+}
+
+.trackerForm .editorActions {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+.trackerError {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--red);
+}
+
 /* Vault */
 .vault {
   margin-top: 3rem;

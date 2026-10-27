@@ -1,4 +1,4 @@
-import { api, ApiError } from '@/lib/api/client';
+import { api, ApiError, query } from '@/lib/api/client';
 
 export interface LegalDocument {
   id: string;
@@ -9,9 +9,18 @@ export interface LegalDocument {
   category: string | null;
   riskLevel: string | null;
   analysis: string | null;
+  /** The citizen's own record; VaadaKaro never submits a letter for them. */
+  submissionStatus: SubmissionStatus;
+  submittedTo: string | null;
+  submissionReference: string | null;
+  submittedOn: string | null;
+  responseNote: string | null;
+  respondedOn: string | null;
   createdAt: string;
   updatedAt: string;
 }
+
+export type SubmissionStatus = 'DRAFT' | 'SUBMITTED' | 'RESPONDED';
 
 export interface LegalAnalysis {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -20,11 +29,12 @@ export interface LegalAnalysis {
   missingEvidence: string[];
 }
 
-export async function getLegalAdvice(query: string, constitutionMode = false) {
+/** `aiConsent` is the guest's per-question agreement; signed-in users' saved choice applies instead. */
+export async function getLegalAdvice(query: string, constitutionMode = false, aiConsent = false) {
   try {
     const res = await api<{ response: string }>('/ai/legal-advice', {
       method: 'POST',
-      json: { query, constitutionMode },
+      json: { query, constitutionMode, aiConsent },
     });
     return { response: res.response };
   } catch (err) {
@@ -60,6 +70,8 @@ export interface LetterDraft {
   assumptions: string[];
   factCheck: { missingFacts: string[]; passed: boolean };
   disclaimer: string;
+  /** Matching entries from the maintained authority directory, most local first. */
+  authorities: Authority[];
 }
 
 export async function draftLetter(data: {
@@ -81,7 +93,7 @@ export async function draftLetter(data: {
 }
 
 /** Saves an edited letter to the user's documents so it can be downloaded as PDF. */
-export async function saveDocument(data: { title: string; content: string; category?: string }) {
+export async function saveDocument(data: { title: string; content: string; category?: string; editedFromAi?: boolean }) {
   try {
     const doc = await api<LegalDocument>('/documents', { method: 'POST', json: data });
     return { success: true as const, document: doc };
@@ -118,4 +130,55 @@ export async function updateLegalDoc(id: string, content: string) {
   } catch {
     return { success: false as const, error: 'Update failed' };
   }
+}
+
+export async function recordSubmission(
+  id: string,
+  data: {
+    status: SubmissionStatus;
+    submittedTo?: string;
+    submissionReference?: string;
+    submittedOn?: string;
+    responseNote?: string;
+    respondedOn?: string;
+  }
+) {
+  try {
+    const doc = await api<LegalDocument>(`/documents/${encodeURIComponent(id)}/submission`, {
+      method: 'PUT',
+      json: Object.fromEntries(Object.entries(data).filter(([, v]) => v !== '' && v !== undefined)),
+    });
+    return { success: true as const, document: doc };
+  } catch (err) {
+    return { success: false as const, error: (err as ApiError).message };
+  }
+}
+
+export interface Authority {
+  id: string;
+  name: string;
+  department: string;
+  categories: string[];
+  state: string | null;
+  district: string | null;
+  howToSubmit: string;
+  submissionUrl: string | null;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  sourceUrl: string;
+  lastVerifiedAt: string | null;
+  isActive: boolean;
+  updatedAt: string;
+  scope?: 'DISTRICT' | 'STATE' | 'NATIONAL';
+  needsRecheck?: boolean;
+}
+
+export async function findAuthorities(filters: {
+  department?: string;
+  category?: string;
+  state?: string;
+  district?: string;
+}): Promise<Authority[]> {
+  return api<Authority[]>(`/authorities${query(filters)}`);
 }

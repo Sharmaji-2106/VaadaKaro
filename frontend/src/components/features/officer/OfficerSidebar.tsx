@@ -11,37 +11,63 @@ import {
   BarChart3,
   Users,
   History,
+  CalendarDays,
+  UserRound,
+  BadgeCheck,
+  Gauge,
+  Landmark,
+  Inbox,
+  ShieldAlert,
 } from 'lucide-react';
 import styles from './OfficerSidebar.module.css';
 import { logoutUser } from '@/services/auth';
 
-const navItems = [
+const settingsItem = { name: 'Settings', icon: Settings, href: '/dashboard/settings' };
+
+const officerItems = [
   { name: 'Overview', icon: LayoutGrid, href: '/dashboard/officer' },
   { name: 'Complaints', icon: FileText, href: '/dashboard/officer/complaints' },
-  { name: 'Settings', icon: Settings, href: '/dashboard/settings' },
 ];
 
 const adminItems = [
   { name: 'Reports', icon: BarChart3, href: '/dashboard/admin/reports' },
+  { name: 'Pilot metrics', icon: Gauge, href: '/dashboard/admin/metrics' },
   { name: 'Users & roles', icon: Users, href: '/dashboard/admin/users' },
+  { name: 'Lawyer verification', icon: BadgeCheck, href: '/dashboard/admin/lawyers' },
+  { name: 'Authority directory', icon: Landmark, href: '/dashboard/admin/authorities' },
+  { name: 'Grievance Officer', icon: Inbox, href: '/dashboard/admin/grievances' },
+  { name: 'Data breaches', icon: ShieldAlert, href: '/dashboard/admin/breaches' },
   { name: 'Audit log', icon: History, href: '/dashboard/admin/audit' },
 ];
 
+const lawyerItems = [
+  { name: 'Overview', icon: LayoutGrid, href: '/dashboard/lawyer' },
+  { name: 'Consultations', icon: CalendarDays, href: '/dashboard/lawyer/bookings' },
+  { name: 'Public profile', icon: UserRound, href: '/dashboard/lawyer/profile' },
+];
+
+// Overview links are exact matches; the others also cover their sub-pages.
+const EXACT = new Set(['/dashboard/officer', '/dashboard/lawyer']);
+
+const PORTAL = {
+  OFFICER: { title: 'Officer', role: 'Officer', items: [...officerItems, settingsItem] },
+  ADMIN: { title: 'Officer', role: 'Administrator', items: [...officerItems, ...adminItems, settingsItem] },
+  LAWYER: { title: 'Lawyer', role: 'Lawyer', items: [...lawyerItems, settingsItem] },
+} as const;
+
 export function OfficerSidebar({ user }: { user: any }) {
   const pathname = usePathname();
-  const items = user?.role === 'ADMIN' ? [...navItems.slice(0, 2), ...adminItems, navItems[2]] : navItems;
+  const portal = PORTAL[user?.role as keyof typeof PORTAL] ?? PORTAL.OFFICER;
 
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
-        <span>Officer</span>
+        <span>{portal.title}</span>
       </div>
 
       <nav className={styles.nav}>
-        {items.map((item) => {
-          const isActive = item.href === '/dashboard/officer'
-            ? pathname === item.href
-            : pathname.startsWith(item.href);
+        {portal.items.map((item) => {
+          const isActive = EXACT.has(item.href) ? pathname === item.href : pathname.startsWith(item.href);
           return (
             <Link
               key={item.href}
@@ -59,8 +85,8 @@ export function OfficerSidebar({ user }: { user: any }) {
         <div className={styles.userCard}>
           <div className={styles.avatar}>{(user?.name || 'O').charAt(0).toUpperCase()}</div>
           <div className={styles.userInfo}>
-            <h4>{user?.name || 'Officer'}</h4>
-            <p>{user?.role === 'ADMIN' ? 'Administrator' : 'Officer'}</p>
+            <h4>{user?.name || portal.role}</h4>
+            <p>{portal.role}</p>
           </div>
           <button className={styles.logoutBtn} onClick={() => logoutUser()} title="Sign Out">
             <LogOut size={16} />

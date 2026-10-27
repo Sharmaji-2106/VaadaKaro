@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import styles from './settings.module.css';
 import { getUserSettings, updateUserSettings } from '@/services/notifications';
+import YourDataPanel from './YourDataPanel';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
@@ -45,22 +46,17 @@ export default function SettingsPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading…</div>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <h1>Settings</h1>
-        
       </header>
 
-      <div className={styles.settingsGrid}>
+      {loading ? (
+        <div className={styles.loading}>Loading…</div>
+      ) : (
+        <>
+          <div className={styles.settingsGrid}>
         {/* Notifications Section */}
         <div className={styles.card}>
           <div className={styles.cardHeader}>
@@ -119,41 +115,30 @@ export default function SettingsPage() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             
-            <h2>Privacy</h2>
+            <h2>Your data</h2>
           </div>
           <div className={styles.cardContent}>
-            <div className={styles.settingItem}>
-              <div className={styles.settingInfo}>
-                <h3>Encryption</h3>
-                <p>Your data is encrypted at rest and in transit.</p>
-              </div>
-              <span className={styles.valueText}>On</span>
-            </div>
-            <div className={styles.settingItem}>
-              <div className={styles.settingInfo}>
-                <h3>Data location</h3>
-                <p>Processed and stored on servers in India.</p>
-              </div>
-              <span className={styles.valueText}>India</span>
-            </div>
+            <YourDataPanel />
           </div>
         </div>
       </div>
 
-      <div className={styles.saveSection}>
-        {showSuccess && (
-          <div className={styles.successMsg}>
-            <CheckCircle2 size={16} /> Saved
+          <div className={styles.saveSection}>
+            {showSuccess && (
+              <div className={styles.successMsg}>
+                <CheckCircle2 size={16} /> Saved
+              </div>
+            )}
+            <button 
+              className={styles.saveBtn} 
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? 'Saving…' : 'Save'}
+            </button>
           </div>
-        )}
-        <button 
-          className={styles.saveBtn} 
-          onClick={handleSave}
-          disabled={saving}
-        >
-          {saving ? 'Saving…' : 'Save'}
-        </button>
-      </div>
+        </>
+      )}
     </div>
   );
 }

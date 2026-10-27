@@ -81,6 +81,15 @@ export default function NotificationCenter() {
       case 'OFFICER_ASSIGNED': return <Info size={16} color="var(--accent)" />;
       case 'REJECTED': return <AlertCircle size={16} color="var(--red)" />;
       case 'INFO_REQUESTED': return <Clock size={16} color="var(--orange)" />;
+      case 'BOOKING_REQUESTED': return <Clock size={16} color="var(--orange)" />;
+      case 'BOOKING_CONFIRMED':
+      case 'BOOKING_COMPLETED':
+      case 'LAWYER_VERIFIED': return <CheckCircle2 size={16} color="var(--green)" />;
+      case 'BOOKING_CANCELLED':
+      case 'LAWYER_UNVERIFIED':
+      case 'DATA_BREACH': return <AlertCircle size={16} color="var(--red)" />;
+      case 'GRIEVANCE_ACKNOWLEDGED': return <Clock size={16} color="var(--orange)" />;
+      case 'GRIEVANCE_RESOLVED': return <CheckCircle2 size={16} color="var(--green)" />;
       default: return <Bell size={16} color="var(--label-tertiary)" />;
     }
   };

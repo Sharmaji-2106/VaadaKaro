@@ -1,0 +1,54 @@
+.box {
+  display: flex;
+  gap: 0.85rem;
+  padding: 1.25rem 1.4rem;
+  border-radius: var(--radius-lg);
+  background: var(--navy-soft);
+  text-align: left;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.box h3 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.box p + p {
+  margin-top: 0.4rem;
+}
+
+.box a {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--navy);
+  margin-top: 2px;
+}
+
+.allowBtn {
+  margin-top: 0.85rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.allowBtn:hover {
+  background: var(--accent-hover);
+}
+
+.allowBtn:disabled {
+  opacity: 0.6;
+}
+
+.error {
+  color: var(--red);
+  margin-top: 0.4rem;
+}

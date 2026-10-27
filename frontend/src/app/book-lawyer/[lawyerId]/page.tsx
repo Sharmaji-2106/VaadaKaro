@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import styles from "../booking.module.css";
 import { CheckCircle2, ChevronLeft } from "lucide-react";
 import { getLawyerById, createBooking } from "@/services/lawyers";
+import type { ApiError } from "@/lib/api/client";
 import Link from "next/link";
 
 const TIME_SLOTS = [
@@ -62,8 +63,15 @@ export default function BookLawyerPage() {
         ...formData
       });
       setIsSuccess(true);
-    } catch (error) {
-      setError("Could not book the consultation. Please try again.");
+    } catch (err) {
+      const e = err as ApiError;
+      setError(
+        e.status === 401
+          ? "Please sign in to book a consultation."
+          : e.status && e.status < 500
+            ? e.message
+            : "Could not book the consultation. Please try again."
+      );
     } finally {
       setIsPending(false);
     }
@@ -74,10 +82,13 @@ export default function BookLawyerPage() {
       <div className={styles.page}>
         <div className={`${styles.container} ${styles.success}`}>
           <CheckCircle2 className={styles.successIcon} size={52} strokeWidth={1.5} />
-          <h2 className={styles.successTitle}>You're booked.</h2>
-          <p>You and the lawyer will receive a confirmation email shortly.</p>
-          <Link href="/find-lawyer" className={styles.backBtn}>
-            Back to lawyers
+          <h2 className={styles.successTitle}>Request sent.</h2>
+          <p>
+            The lawyer will confirm or decline your request. You&apos;ll get a notification here, and their contact
+            details appear once they confirm.
+          </p>
+          <Link href="/dashboard/bookings" className={styles.backBtn}>
+            See my consultations
           </Link>
         </div>
       </div>

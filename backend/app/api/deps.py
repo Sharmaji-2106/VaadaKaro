@@ -9,6 +9,7 @@ from app.core.security import decode_access_token
 from app.models import User, UserRole
 from app.services.ai.provider import AIService
 from app.services.ai.tasks import get_ai_service
+from app.services.consent import AI_CONSENT_REQUIRED
 
 AI = Annotated[AIService, Depends(get_ai_service)]
 
@@ -57,6 +58,21 @@ def require_roles(*roles: UserRole):
 
 Officer = Annotated[User, Depends(require_roles(UserRole.OFFICER, UserRole.ADMIN))]
 Admin = Annotated[User, Depends(require_roles(UserRole.ADMIN))]
+Lawyer = Annotated[User, Depends(require_roles(UserRole.LAWYER))]
+
+
+async def get_ai_consented_user(user: CurrentUser) -> User:
+    """Signed-in user who has consented to their text being sent to the AI provider."""
+    if not user.ai_consent:
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            f"{AI_CONSENT_REQUIRED}: turn on AI processing in Settings to use this feature. "
+            "Your text is sent to Google Gemini to generate the draft.",
+        )
+    return user
+
+
+AIUser = Annotated[User, Depends(get_ai_consented_user)]
 
 
 def is_official(user: User | None) -> bool:

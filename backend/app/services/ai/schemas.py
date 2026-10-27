@@ -2,6 +2,7 @@ from enum import StrEnum
 
 from pydantic import Field
 
+from app.core.departments import Department
 from app.schemas.base import ApiModel
 
 
@@ -60,6 +61,10 @@ class LetterDraft(ApiModel):
     english_summary: str
     category: str
     suggested_department: str
+    department_group: Department = Field(
+        default=Department.OTHER,
+        description="The closest of the fixed department groups; used to look up the verified authority directory.",
+    )
     authority_note: str = Field(
         description="Why this department is suggested and what the citizen should verify about jurisdiction."
     )

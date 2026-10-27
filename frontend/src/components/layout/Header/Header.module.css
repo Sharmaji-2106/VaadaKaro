@@ -188,7 +188,8 @@
   padding: 0.75rem;
 }
 
-@media (max-width: 960px) {
+/* Six nav links plus the account controls need about 1180px. */
+@media (max-width: 1180px) {
   .nav { display: none; }
   .menuBtn { display: flex; }
   .authLinks { display: none; }

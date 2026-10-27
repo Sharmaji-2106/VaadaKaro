@@ -44,6 +44,21 @@ class Settings(BaseSettings):
 
     duplicate_window_minutes: int = 5
 
+    # IT (Intermediary Guidelines) Rules, 2021, rule 3(2): the Grievance Officer's name and contact
+    # must be published. Set these to the real, appointed person before launch.
+    grievance_officer_name: str | None = None
+    grievance_officer_email: str = "grievance@vaadakaro.in"
+    grievance_officer_address: str | None = None
+    # Same rule: acknowledge within 24 hours, dispose of within 15 days. DPDP rights requests are
+    # handled on the same, shorter clock.
+    grievance_resolution_days: int = 15
+    # Bump when the privacy notice changes; consents record the version the person saw.
+    privacy_notice_version: str = "2026-10-26"
+    # Retention (DPDP Act s.8(7): erase once the purpose is served). Audit logs are never purged
+    # by retention: the DPDP Rules and CERT-In directions require logs to be kept.
+    retain_read_notifications_days: int = 180
+    retain_assistant_history_days: int = 365
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"

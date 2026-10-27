@@ -5,6 +5,8 @@ import styles from "./ai-assistant.module.css";
 import { Send, Bot, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { getLegalAdvice } from "@/services/legal";
+import { getPrivacyStatus, isAiConsentError } from "@/services/privacy";
+import { AiConsentPrompt } from "@/components/features/privacy/AiConsentPrompt";
 
 interface Message {
   role: "user" | "bot";
@@ -33,7 +35,17 @@ export default function AIAssistantPage() {
   const [input, setInput] = useState("");
   const [isPending, setIsPending] = useState(false);
   const [isConstitutionMode, setIsConstitutionMode] = useState(false);
+  // null until we know; guests tick consent per question, signed-in users have a saved choice.
+  const [account, setAccount] = useState<{ signedIn: boolean; aiConsent: boolean } | null>(null);
+  const [guestConsent, setGuestConsent] = useState(false);
+  const [needsConsent, setNeedsConsent] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    getPrivacyStatus().then((r) =>
+      setAccount(r.success ? { signedIn: true, aiConsent: r.data.aiConsent } : { signedIn: false, aiConsent: false })
+    );
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -44,6 +56,10 @@ export default function AIAssistantPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isPending) return;
+    if (account?.signedIn && !account.aiConsent) {
+      setNeedsConsent(true);
+      return;
+    }
 
     const userQuery = input.trim();
     setInput("");
@@ -51,14 +67,18 @@ export default function AIAssistantPage() {
     setIsPending(true);
 
     try {
-      const result = await getLegalAdvice(userQuery, isConstitutionMode);
+      const result = await getLegalAdvice(userQuery, isConstitutionMode, guestConsent);
       if (result.response) {
         setMessages(prev => [...prev, { role: "bot", content: result.response! }]);
+      } else if (isAiConsentError(result.error)) {
+        setNeedsConsent(true);
+        setMessages(prev => prev.slice(0, -1));
+        setInput(userQuery);
       } else {
-        setMessages(prev => [...prev, { role: "bot", content: "I encountered an error. Please try again." }]);
+        setMessages(prev => [...prev, { role: "bot", content: result.error || "I encountered an error. Please try again." }]);
       }
-    } catch (error) {
-      setMessages(prev => [...prev, { role: "bot", content: "Connection error. Please ensure your Gemini API key is configured." }]);
+    } catch {
+      setMessages(prev => [...prev, { role: "bot", content: "Couldn't reach the assistant. Please try again in a moment." }]);
     } finally {
       setIsPending(false);
     }
@@ -122,6 +142,28 @@ export default function AIAssistantPage() {
           </div>
 
           <div className={styles.inputArea}>
+            {needsConsent && account?.signedIn && (
+              <div className={styles.consentWrap}>
+                <AiConsentPrompt
+                  onGranted={() => {
+                    setAccount({ signedIn: true, aiConsent: true });
+                    setNeedsConsent(false);
+                  }}
+                />
+              </div>
+            )}
+            {account && !account.signedIn && (
+              <label className={styles.consentLine}>
+                <input type="checkbox" checked={guestConsent} onChange={(e) => setGuestConsent(e.target.checked)} />
+                <span>
+                  Send my question to Google Gemini (which may process it outside India) to get an answer. Don&apos;t
+                  include names, phone numbers or ID numbers. <Link href="/privacy#ai-processing">Privacy notice</Link>
+                </span>
+              </label>
+            )}
+            {needsConsent && account && !account.signedIn && !guestConsent && (
+              <p className={styles.consentHint} role="alert">Tick the box above to send your question.</p>
+            )}
             <form onSubmit={handleSubmit} className={styles.form}>
               <input
                 type="text"

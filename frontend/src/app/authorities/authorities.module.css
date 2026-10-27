@@ -1,0 +1,55 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 16px 4rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.field label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--label-secondary);
+}
+
+.field input {
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--separator);
+  background: var(--surface);
+  font-size: 0.9375rem;
+}
+
+.status {
+  margin-bottom: 0.65rem;
+  font-size: 0.875rem;
+  color: var(--label-secondary);
+}
+
+.footnote {
+  margin-top: 2rem;
+  font-size: 0.8125rem;
+  color: var(--label-tertiary);
+  line-height: 1.5;
+}
+
+.footnote a {
+  color: var(--link);
+}

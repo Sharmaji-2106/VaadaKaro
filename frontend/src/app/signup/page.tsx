@@ -52,9 +52,26 @@ export default function SignupPage() {
             </div>
 
             <label className={styles.checkboxLabel}>
+              <input type="checkbox" name="adult" required />
+              <span>I am 18 years of age or older.</span>
+            </label>
+
+            <label className={styles.checkboxLabel}>
               <input type="checkbox" name="consent" required />
               <span>
-                I agree to the <Link href="/terms" target="_blank">Terms of service</Link> and <Link href="/privacy" target="_blank">Privacy policy</Link>.
+                I have read the <Link href="/privacy" target="_blank">privacy notice</Link> (also in{' '}
+                <Link href="/privacy#hindi" target="_blank">हिन्दी</Link> and{' '}
+                <Link href="/privacy#marathi" target="_blank">मराठी</Link>) and agree to my personal data being used to run my
+                account and the complaints I file. I accept the <Link href="/terms" target="_blank">Terms of service</Link>.
+              </span>
+            </label>
+
+            <label className={styles.checkboxLabel}>
+              <input type="checkbox" name="aiConsent" />
+              <span>
+                <strong>Optional:</strong> send what I type in the AI tools (letter drafting, legal assistant) to Google
+                Gemini to generate answers. You can still file and track complaints without this, and turn it on or off
+                any time in Settings.
               </span>
             </label>
 

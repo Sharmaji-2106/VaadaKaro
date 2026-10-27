@@ -12,6 +12,10 @@ export interface SessionUser {
   role: 'CITIZEN' | 'OFFICER' | 'LAWYER' | 'ADMIN';
   department?: string | null;
   location?: string | null;
+  /** Consent to send their text to the AI provider; null if never asked. */
+  aiConsent?: boolean | null;
+  /** The current privacy notice hasn't been shown to this person yet. */
+  needsNotice?: boolean;
 }
 
 /**

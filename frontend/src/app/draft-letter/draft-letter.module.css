@@ -104,6 +104,23 @@
   font-size: 0.9375rem;
 }
 
+.whereToSend {
+  margin-bottom: 1rem;
+}
+
+.whereToSend h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.whereToSend > .hint {
+  margin: 0.15rem 0 0.65rem;
+}
+
+.whereToSend > p:last-child {
+  margin-top: 0.5rem;
+}
+
 .letterCard {
   background: var(--surface);
   border-radius: var(--radius-lg);

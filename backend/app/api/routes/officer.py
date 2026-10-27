@@ -75,7 +75,9 @@ async def stats(user: Officer) -> OfficerStats:
 async def list_complaints(
     user: Officer,
     status_: Annotated[ComplaintStatus | None, Query(alias="status")] = None,
-    priority: PriorityLevel | None = None,
+    # Repeat the parameter to match any of several priorities (?priority=URGENT&priority=HIGH).
+    priority: Annotated[list[PriorityLevel] | None, Query()] = None,
+    open_only: Annotated[bool, Query(alias="open")] = False,
     department: str | None = None,
     search: Annotated[str | None, Query(max_length=100)] = None,
     page: Annotated[int, Query(ge=1)] = 1,
@@ -88,8 +90,10 @@ async def list_complaints(
     filters = dict(scope)
     if status_:
         filters["status"] = status_.value
+    elif open_only:
+        filters["status"] = {"$nin": [ComplaintStatus.RESOLVED.value, ComplaintStatus.REJECTED.value]}
     if priority:
-        filters["priority"] = priority.value
+        filters["priority"] = {"$in": [p.value for p in priority]}
     if search:
         filters["$or"] = [{"tracking_id": contains(search)}, {"title": contains(search)}]
 

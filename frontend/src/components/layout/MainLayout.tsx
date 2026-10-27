@@ -24,6 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <h4>Services</h4>
             <div className={styles.footerLinks}>
               <Link href="/file-complaint">File a complaint</Link>
+              <Link href="/authorities">Where to complain</Link>
               <Link href="/track-complaint">Track status</Link>
               <Link href="/ai-assistant">Legal assistant</Link>
               <Link href="/generate-docs">Draft legal documents</Link>
@@ -46,6 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <Link href="/privacy">Privacy policy</Link>
               <Link href="/terms">Terms of service</Link>
               <Link href="/disclaimer">AI disclaimer</Link>
+              <Link href="/grievance">Grievance Officer</Link>
             </div>
           </div>
         </div>

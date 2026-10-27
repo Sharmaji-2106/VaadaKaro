@@ -1,9 +1,15 @@
 import React from 'react';
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 import styles from './overview.module.css';
-import { getOfficerStats } from '@/services/server';
+import table from './complaints/complaints.module.css';
+import { getHighPriorityComplaints, getOfficerStats } from '@/services/server';
+
+const toLabel = (value: string) =>
+  value.replace(/_/g, ' ').toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
 
 export default async function OfficerOverview() {
-  const result = await getOfficerStats();
+  const [result, urgent] = await Promise.all([getOfficerStats(), getHighPriorityComplaints(5)]);
   const stats = (result?.success && result.stats) ? result.stats : {
     total: 0,
     pending: 0,
@@ -37,8 +43,38 @@ export default async function OfficerOverview() {
       </div>
 
       <section className={styles.recentSection}>
-        <h2 className={styles.sectionTitle}>High priority</h2>
-        <p className={styles.emptyNote}>High-priority cases will appear here as they are filed.</p>
+        <h2 className={styles.sectionTitle}>
+          High priority{urgent.total > 0 && <span className={table.secondaryText}> · {urgent.total} open</span>}
+        </h2>
+        {urgent.complaints.length === 0 ? (
+          <p className={styles.emptyNote}>No urgent or high-priority complaints are open.</p>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table className={table.table} style={{ minWidth: 560 }}>
+              <tbody>
+                {urgent.complaints.map((c: any) => (
+                  <tr key={c.id} className={table.tr}>
+                    <td className={table.td}>
+                      <div className={table.primaryText}>{c.title}</div>
+                      <div className={table.trackingId}>{c.trackingId}</div>
+                    </td>
+                    <td className={table.td}>
+                      <span className={table.priorityBadge} data-priority={c.priority}>{toLabel(c.priority)}</span>
+                    </td>
+                    <td className={table.td}>
+                      <span className={table.statusBadge} data-status={c.status}>{toLabel(c.status)}</span>
+                    </td>
+                    <td className={table.td} style={{ textAlign: 'right' }}>
+                      <Link href={`/dashboard/officer/complaints/${c.id}`} className={table.viewBtn}>
+                        Open <ChevronRight size={15} />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
     </div>
   );

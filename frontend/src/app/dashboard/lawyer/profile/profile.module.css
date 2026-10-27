@@ -1,0 +1,138 @@
+.verification {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  background: var(--saffron-soft);
+  color: var(--saffron-text);
+}
+
+.verification[data-verified="true"] {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.verification svg {
+  flex-shrink: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.group {
+  border: none;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.group legend {
+  float: left;
+  width: 100%;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.9rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.875rem;
+}
+
+.field > span {
+  font-weight: 500;
+}
+
+.field small {
+  color: var(--label-tertiary);
+  font-size: 0.8125rem;
+}
+
+.field input,
+.field textarea {
+  padding: 0.55rem 0.8rem;
+  border-radius: 10px;
+  border: none;
+  background: var(--fill-strong);
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  background: var(--surface);
+  box-shadow: 0 0 0 4px rgba(242, 140, 40, 0.4);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip span {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: var(--fill-strong);
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chip input:checked + span {
+  background: var(--navy);
+  color: white;
+}
+
+.chip input:focus-visible + span {
+  box-shadow: 0 0 0 3px rgba(242, 140, 40, 0.5);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--accent);
+}
